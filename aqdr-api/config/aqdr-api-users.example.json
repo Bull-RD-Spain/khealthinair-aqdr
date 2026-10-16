@@ -1,0 +1,28 @@
+[
+    {
+        "username": "admin_user",
+        "hashed_password": "<bcrypt hash, see README>",
+        "disabled": false,
+        "access": [
+            "AQ",
+            "AT",
+            "ES",
+            "NO",
+            "NL",
+            "PL",
+            "DE",
+            "sensors"
+        ],
+        "description": "Administrator"
+    },
+    {
+        "username": "sensors_es",
+        "hashed_password": "<bcrypt hash, see README>",
+        "disabled": false,
+        "access": [
+            "ES",
+            "sensors"
+        ],
+        "description": "ES Pilot Sensor Administrator"
+    }
+]

@@ -1,0 +1,614 @@
+{
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": {
+					"type": "grafana",
+					"uid": "-- Grafana --"
+				},
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"type": "dashboard"
+			}
+		]
+	},
+	"description": "This panel aims to compare the measurements for which there are exterior and interior data, so trends and other patterns could be visualized in parallel .",
+	"editable": true,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"links": [],
+	"liveNow": false,
+	"panels": [
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Dashboard to compare Temperature (Indoor vs Outdoor). Filtering by pilot, scenario and sub_scenario is possible.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "continuous-BlYlRd",
+						"seriesBy": "min"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 0,
+						"gradientMode": "scheme",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 2,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "always",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "[${__field.labels.AQ}] ${__field.labels.id_pilot}${__field.labels.area} [${__field.labels.sensor_id}]",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "celsius"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byFrameRefID",
+							"options": "INDOOR"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-blue",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byFrameRefID",
+							"options": "OUTDOOR"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-purple",
+									"mode": "fixed"
+								}
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 8,
+				"w": 12,
+				"x": 0,
+				"y": 0
+			},
+			"id": 1,
+			"maxDataPoints": 10000,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": false
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r._field == \"temperature\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)",
+					"refId": "INDOOR"
+				},
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"hide": false,
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r._field == \"out_temperature\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)",
+					"refId": "OUTDOOR"
+				}
+			],
+			"title": "Temperature (In vs Out)",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Dashboard to compare Humidity (Indoor vs Outdoor). Filtering by pilot, scenario and sub_scenario is possible.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "continuous-blues",
+						"seriesBy": "min"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 0,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "[${__field.labels.AQ}] ${__field.labels.id_pilot}${__field.labels.area} [${__field.labels.sensor_id}]",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "humidity"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 8,
+				"w": 12,
+				"x": 12,
+				"y": 0
+			},
+			"id": 2,
+			"maxDataPoints": 10000,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": false
+				},
+				"tooltip": {
+					"mode": "multi",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r._field == \"humidity\" or r._field == \"out_humidity\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)",
+					"refId": "A"
+				}
+			],
+			"title": "Humidity (In vs Out)",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Dashboard to compare PMs (Indoor vs Outdoor). Filtering by pilot, scenario and sub_scenario is possible. Only PM2.5 and PM10 are compared here.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic",
+						"seriesBy": "min"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 4,
+						"gradientMode": "opacity",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "dashed+area"
+						}
+					},
+					"displayName": "[${__field.labels.AQ}] ${__field.labels.id_pilot}${__field.labels.area} [${__field.labels.sensor_id}] ${__field.name}",
+					"fieldMinMax": false,
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							}
+						]
+					},
+					"unit": "µg/m³"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*/"
+						},
+						"properties": []
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/out.*/"
+						},
+						"properties": [
+							{
+								"id": "custom.lineStyle",
+								"value": {
+									"dash": [
+										10,
+										10
+									],
+									"fill": "dash"
+								}
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 12,
+				"w": 24,
+				"x": 0,
+				"y": 8
+			},
+			"id": 3,
+			"maxDataPoints": 10000,
+			"options": {
+				"legend": {
+					"calcs": [
+						"max",
+						"min",
+						"mean"
+					],
+					"displayMode": "table",
+					"placement": "right",
+					"showLegend": true,
+					"sortBy": "Name",
+					"sortDesc": true
+				},
+				"tooltip": {
+					"mode": "multi",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r._field == \"pm10\" or r._field == \"pm25\" or r._field == \"out_pm10\" or r._field == \"out_pm25\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)",
+					"refId": "A"
+				}
+			],
+			"title": "Particles Matter (PM2.5, PM10) (In vs Out)",
+			"transparent": true,
+			"type": "timeseries"
+		}
+	],
+	"refresh": "",
+	"schemaVersion": 39,
+	"tags": [
+		"at",
+		"de",
+		"es",
+		"nl",
+		"no",
+		"pl"
+	],
+	"templating": {
+		"list": [
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"description": "Allows filtering air quality data by pilot locations.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Pilot",
+				"multi": true,
+				"name": "pilot",
+				"options": [
+					{
+						"selected": true,
+						"text": "All",
+						"value": "$__all"
+					},
+					{
+						"selected": false,
+						"text": "Austria (AT)",
+						"value": "AT"
+					},
+					{
+						"selected": false,
+						"text": "Germany (DE)",
+						"value": "DE"
+					},
+					{
+						"selected": false,
+						"text": "Spain (ES)",
+						"value": "ES"
+					},
+					{
+						"selected": false,
+						"text": "Netherlands (NL)",
+						"value": "NL"
+					},
+					{
+						"selected": false,
+						"text": "Norway (NO)",
+						"value": "NO"
+					},
+					{
+						"selected": false,
+						"text": "Poland (PL)",
+						"value": "PL"
+					}
+				],
+				"query": "Austria (AT) : AT, Germany (DE) : DE, Spain (ES) : ES, Netherlands (NL) : NL, Norway (NO) : NO, Poland (PL) : PL",
+				"queryValue": "",
+				"skipUrlSync": false,
+				"type": "custom"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"description": "Allows filtering air quality data by type of scenario locations.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Scenario",
+				"multi": true,
+				"name": "scenario",
+				"options": [
+					{
+						"selected": true,
+						"text": "All",
+						"value": "$__all"
+					},
+					{
+						"selected": false,
+						"text": "Canteens (CAN)",
+						"value": "CAN"
+					},
+					{
+						"selected": false,
+						"text": "Lecture Halls (LEC)",
+						"value": "LEC"
+					},
+					{
+						"selected": false,
+						"text": "Residence Homes (RES)",
+						"value": "RES"
+					},
+					{
+						"selected": false,
+						"text": "Retirement Homes (RET)",
+						"value": "RET"
+					},
+					{
+						"selected": false,
+						"text": "Schools (SCH)",
+						"value": "SCH"
+					},
+					{
+						"selected": false,
+						"text": "Homes (HOM)",
+						"value": "HOM"
+					},
+					{
+						"selected": false,
+						"text": "Hospitals (HOS)",
+						"value": "HOS"
+					},
+					{
+						"selected": false,
+						"text": "Markets (MKT)",
+						"value": "MKT"
+					},
+					{
+						"selected": false,
+						"text": "Metro Stations (MET)",
+						"value": "MET"
+					}
+				],
+				"query": "Canteens (CAN) : CAN, Lecture Halls (LEC) : LEC, Residence Homes (RES) : RES, Retirement Homes (RET) : RET, Schools (SCH) : SCH, Homes (HOM) : HOM, Hospitals (HOS) : HOS, Markets (MKT) : MKT, Metro Stations (MET) : MET",
+				"queryValue": "",
+				"skipUrlSync": false,
+				"type": "custom"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> group(columns: [\"sub_scenario\"])\r\n  |> distinct(column: \"sub_scenario\")\r\n  |> keep(columns: [\"_value\"])",
+				"description": "Allows filtering air quality data according to specific scenario location.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "SubScenario",
+				"multi": true,
+				"name": "sub_scenario",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> group(columns: [\"sub_scenario\"])\r\n  |> distinct(column: \"sub_scenario\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 2,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> group(columns: [\"area\"])\r\n  |> distinct(column: \"area\")\r\n  |> keep(columns: [\"_value\"])",
+				"description": "Allows filtering air quality data according to specific area location.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Area",
+				"multi": true,
+				"name": "area",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> group(columns: [\"area\"])\r\n  |> distinct(column: \"area\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 2,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			}
+		]
+	},
+	"time": {
+		"from": "now-6h",
+		"to": "now"
+	},
+	"timepicker": {
+		"hidden": false,
+		"refresh_intervals": []
+	},
+	"timezone": "",
+	"title": "4. Indoor vs Outdoor Pollutants",
+	"uid": "indoor-vs-outdoor-pollutants",
+	"version": 1,
+	"weekStart": ""
+}

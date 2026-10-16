@@ -1,0 +1,539 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "aqdr-ts-db-flux"
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "<style>\n  @font-face {font-family: 'Quicksand';src: url(\"public/fonts/Quicksand.woff2\") format('woff2')}\n</style>\n<div style=\"color:#548343; font-weight:bold; background-color:#b8bb62; font-size:larger;\">\n  &nbsp;Monitoring Devices status\n</div>\n<div style=\"color:#548343; font-weight:normal;\">\n  This dashboard shows the status of the monitoring devices. (Under development)\n</div>",
+        "mode": "html"
+      },
+      "pluginVersion": "10.4.3",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "aqdr-platform-db"
+      },
+      "description": "Registered monitoring sensor devices from the AQDR-Platform-DB",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "orange",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "json-view"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "n"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 50
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pilot"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 84
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scenario"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 99
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Registered"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SensorID"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 0,
+        "y": 2
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": [],
+          "reducer": [
+            "count"
+          ],
+          "show": true
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "aqdr-platform-db"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ROW_NUMBER() OVER (ORDER BY pilot, scenario, inclusion_time, sensor_id) as n, pilot as \"Pilot\", scenario as \"Scenario\", sensor_id as \"SensorID\", to_char(\"inclusion_time\", 'DD/MM/YYYY') as \"Registered\"\r\nFROM sensors\r\nWHERE pilot IN (${pilot:singlequote})\r\nORDER BY pilot, scenario, inclusion_time, sensor_id",
+          "refId": "registered",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "pilot",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "scenario",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "inclusion_time",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "sensor_id",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "orderBy": {
+              "property": {
+                "name": [
+                  "pilot"
+                ],
+                "type": "string"
+              },
+              "type": "property"
+            }
+          },
+          "table": "sensors"
+        }
+      ],
+      "title": "Registered monitoring sensor devices",
+      "transparent": true,
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "${__field.labels.id_pilot}",
+          "fieldMinMax": true,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#218114",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 2
+      },
+      "id": 5,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "aqdr-platform-db"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n  pilot as id_pilot,\r\n  count(sensor_id) as registered\r\nFROM\r\n  sensors\r\nWHERE\r\n  pilot IN (${pilot:singlequote})\r\nGROUP BY\r\n  pilot",
+          "refId": "registered_sensors",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "aqdr-ts-db-flux"
+          },
+          "query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> group(columns: [\"id_pilot\",\"sensor_id\"])\r\n  |> distinct(column: \"sensor_id\")\r\n  |> group(columns: [\"id_pilot\"])\r\n  |> count(column: \"sensor_id\")\r\n  |> keep(columns: [\"id_pilot\", \"sensor_id\"])",
+          "refId": "working_sensors"
+        }
+      ],
+      "title": "Device Status",
+      "transformations": [
+        {
+          "id": "configFromData",
+          "options": {
+            "applyTo": {
+              "id": "byName",
+              "options": "sensor_id"
+            },
+            "configRefId": "registered_sensors",
+            "mappings": []
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "description": "IAQ Inactive sensors, based on not having data in the period of time set in the filters.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "color-text"
+            },
+            "filterable": true,
+            "inspect": true
+          },
+          "displayName": "Inactive",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 7
+      },
+      "id": 4,
+      "maxDataPoints": 1000000,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": true,
+          "enablePagination": false,
+          "fields": "",
+          "reducer": [
+            "count"
+          ],
+          "show": true
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "_value 04d2482da5955274fea83e6ad8d4768491689d96"
+          }
+        ]
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "aqdr-ts-db-flux"
+          },
+          "hide": false,
+          "query": "import \"array\"\r\nimport \"join\"\r\n\r\nsensorRegistered = array.from(rows: [${sensors_stream}])\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> map(fn: (r) => ({\r\n      _value: string(v: r._value),\r\n      id_pilot: string(v: r.id_pilot)\r\n  }))\r\n\r\nsensorActives = from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> group(columns: [\"sensor_id\"])\r\n  |> distinct(column: \"sensor_id\")\r\n  |> keep(columns: [\"_value\"])\r\n  |> map(fn: (r) => ({\r\n      _value: string(v: r._value)\r\n  }))\r\n\r\nsensorInactives = join.left(\r\n    left: sensorRegistered,\r\n    right: sensorActives,\r\n    on: (l, r) => l._value == r._value,\r\n    as: (l, r) => ({ v_left: l._value, v_right: if exists r._value then r._value else \"\"}),\r\n)\r\n  |> filter(fn: (r) => r.v_right == \"\")\r\n  |> keep(columns: [\"v_left\"])\r\n\r\nsensorInactives",
+          "refId": "inactive"
+        }
+      ],
+      "title": "Inactive monitoring sensor devices",
+      "transparent": true,
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": [
+    "at",
+    "de",
+    "es",
+    "nl",
+    "no",
+    "pl"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "description": "Allows filtering air quality data by pilot locations.",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Pilot",
+        "multi": true,
+        "name": "pilot",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "Austria (AT)",
+            "value": "AT"
+          },
+          {
+            "selected": false,
+            "text": "Germany (DE)",
+            "value": "DE"
+          },
+          {
+            "selected": false,
+            "text": "Spain (ES)",
+            "value": "ES"
+          },
+          {
+            "selected": false,
+            "text": "Netherlands (NL)",
+            "value": "NL"
+          },
+          {
+            "selected": false,
+            "text": "Norway (NO)",
+            "value": "NO"
+          },
+          {
+            "selected": false,
+            "text": "Poland (PL)",
+            "value": "PL"
+          }
+        ],
+        "query": "Austria (AT) : AT, Germany (DE) : DE, Spain (ES) : ES, Netherlands (NL) : NL, Norway (NO) : NO, Poland (PL) : PL",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "{_value:\"eb45cb8d8168b113b26aaa8e187b71132909630f\", id_pilot:\"ES\"},{_value:\"eb58937e03f00c2cb6ab77d8eed70a897c8abd88\", id_pilot:\"ES\"},{_value:\"66255023aab6c485323d000d83eb5fdaae7fcb61\", id_pilot:\"ES\"},{_value:\"9446142fc1699f6e5dda7a9b5d58b62225c571b8\", id_pilot:\"ES\"},{_value:\"7566eac96f10473d05eb62b5c1f40eca429c7859\", id_pilot:\"ES\"},{_value:\"1a9dda1dc61e36cb9fb6a53d996a9577fcdf6f2f\", id_pilot:\"ES\"},{_value:\"d2493664efbc5e3c409736c3f1f8d31d0b054fa0\", id_pilot:\"ES\"},{_value:\"0152c5c067de460993de2190b1be64bb\", id_pilot:\"AT\"},{_value:\"22fcc31f6e734be4a830960d34ed116e\", id_pilot:\"AT\"},{_value:\"0199a74e0cd73542edc8ef2f9b9f52c0cc27befb\", id_pilot:\"ES\"},{_value:\"bf5e3d06824529b782a9f8e09536066748347433\", id_pilot:\"ES\"},{_value:\"ed5a0df05013a990a6bd02197dbd02ded8956e99\", id_pilot:\"ES\"},{_value:\"f51f7dc539fb9686872e1ec4c48076579249f7e2\", id_pilot:\"ES\"},{_value:\"51a03d63fd5934b46540bed17d85ee5ff504d024\", id_pilot:\"ES\"},{_value:\"eb147794a1e1aa94d543ea43a69853ffcec4262b\", id_pilot:\"ES\"},{_value:\"7bd667d3d2829ad1a0dd9819a9ddf5bb9b909e6f\", id_pilot:\"ES\"},{_value:\"283ab62f3cc0beaf012a4c5268b4478cde2864f5\", id_pilot:\"ES\"},{_value:\"ddcff975f3948f76704d57a37bebcd45bbbe3df0\", id_pilot:\"ES\"},{_value:\"bfe141482a5500cf06fcadc0470123ef4a97bf09\", id_pilot:\"ES\"},{_value:\"ecfcfaf7b53b4e80a4bf1aee42da4b4c\", id_pilot:\"AT\"},{_value:\"7362154a0788460abfeecd0b00839047\", id_pilot:\"AT\"},{_value:\"185d711f0b462fbe207d3fa85524bcaa72267a70\", id_pilot:\"ES\"},{_value:\"8faf4e12f5b9c5fcfceaaae49fcfd7bb4993b64a\", id_pilot:\"ES\"},{_value:\"eff0b3aba9d934741ee5b65147c2f62cc6834182\", id_pilot:\"ES\"},{_value:\"68e49432fa36e287b088d8f72e0ea2f1878c5763\", id_pilot:\"ES\"},{_value:\"e5d5ee40838cd8491fe278954ac4a8baf3cdc049\", id_pilot:\"ES\"},{_value:\"1cac5b8f75739cdc3be102dd1abb232353eaba69\", id_pilot:\"ES\"},{_value:\"a289aeb0a9fffb7ca8bf3827f63c912d618dbfe5\", id_pilot:\"ES\"},{_value:\"a250ed281dd519353c2a2c18b81f9d4b66f4d95e\", id_pilot:\"ES\"},{_value:\"b00fb56b65bca5065c6c5920dcb45c02311e9574\", id_pilot:\"ES\"},{_value:\"7352fafe350b4a708b68374e4e5963e4\", id_pilot:\"AT\"},{_value:\"189829df00864bf7b4f46207a5a29007\", id_pilot:\"AT\"},{_value:\"3dd99c15dc1e4f6495acaa80baebea085fe7be87\", id_pilot:\"ES\"},{_value:\"c605ca720db87308191a492dabff396c5a6e1acb\", id_pilot:\"ES\"},{_value:\"f89e36712eff17b509957936f9abf4dcb3d6109a\", id_pilot:\"ES\"},{_value:\"6b6bb33987fef1aacada9c2c2466e14aa36db0c1\", id_pilot:\"ES\"},{_value:\"dacf3746f79cddd76461d51ae23b29656d908181\", id_pilot:\"ES\"},{_value:\"3f558b68f0d159c5a2aa1438280320cdf5fd78ba\", id_pilot:\"ES\"},{_value:\"722480c8b87a92e6ac34156fac8d68e83010dfc8\", id_pilot:\"ES\"},{_value:\"053e95cb7b4c92ede59f71a1ad3350a393480a6a\", id_pilot:\"ES\"},{_value:\"1d4f23a14095a9240700706af66b7bea86ae2692\", id_pilot:\"ES\"},{_value:\"62f81d2413f04359bdb00b680cb7ac14\", id_pilot:\"AT\"},{_value:\"3e851716aa9f48fe939c2307513744ce\", id_pilot:\"AT\"},{_value:\"4760e271b056a3dbd1b844dab8cfb54a89b5c2a1\", id_pilot:\"ES\"},{_value:\"cb9cd69a003e8ec88f57ea27be076135cac6d414\", id_pilot:\"ES\"},{_value:\"550460c01d82de2c9d439ac457c604e557ee40b7\", id_pilot:\"ES\"},{_value:\"c5d76f8b0fcd4e62c90456763bbee482a9f798fc\", id_pilot:\"ES\"},{_value:\"dc8941970f4cff43122dec68b32445c0f87ef40c\", id_pilot:\"ES\"},{_value:\"9554828be4027d2feb140df780bc63329221a745\", id_pilot:\"ES\"},{_value:\"53eeb0bd6bf1741b1da9509a9516bf4018dbf98e\", id_pilot:\"ES\"},{_value:\"1ce45a0743ae32ced478ae34e2a92740f02d3b12\", id_pilot:\"ES\"},{_value:\"69de0189ef22462fb37238327cd32ae9\", id_pilot:\"AT\"},{_value:\"1e578288e756497c99e6f9166ad5bd3e\", id_pilot:\"AT\"},{_value:\"4da9ed4012c77e4fed6d4bcb35ee035805e09dff\", id_pilot:\"ES\"},{_value:\"d04ddb2ab94fdf8f3c2de06537570efd6b233bae\", id_pilot:\"ES\"},{_value:\"3178b2ff55a845a7b592fb133c8e2d5d\", id_pilot:\"AT\"},{_value:\"7913460073724b93a98cc91e5a73c806\", id_pilot:\"AT\"},{_value:\"49870edd785c4fd48cc92fa9f5df200e\", id_pilot:\"AT\"},{_value:\"ed0cdc679c694547af0537ee01f1c99a\", id_pilot:\"AT\"},{_value:\"831c4241d4e341d598a5eafffa338ffa\", id_pilot:\"AT\"},{_value:\"d53c892651664255b587fd518dfb9c2e\", id_pilot:\"AT\"},{_value:\"d96e50c62f2d48d2895d14b9cda85201\", id_pilot:\"AT\"},{_value:\"93b7034384834895a37ccbba725158f4\", id_pilot:\"AT\"},{_value:\"a4f308f947094deab625d3bed86c1c43\", id_pilot:\"AT\"},{_value:\"b9e53b9ab41f47dd9ccb286ff056939d\", id_pilot:\"AT\"},{_value:\"f07601ac9ce2492da9f677f2b81ba9a1\", id_pilot:\"AT\"},{_value:\"18137896bcfc4d1a9683e76be53ef39a\", id_pilot:\"AT\"},{_value:\"a2e9249bb3254afab89ffd33f458db60\", id_pilot:\"PL\"},{_value:\"0775e2e5ab8d4dfb811a30b3f60aa01f\", id_pilot:\"PL\"},{_value:\"0fd30091a2cb49f58c9e54f037747360\", id_pilot:\"PL\"},{_value:\"a8c1ba434d064424ae109c83561f9e49\", id_pilot:\"PL\"},{_value:\"bcf5a79f932f4f0ebd07d61125174a1a\", id_pilot:\"PL\"},{_value:\"eb015163ec56471f9f4df9ac0c99bf16\", id_pilot:\"PL\"},{_value:\"237e304839bd4df3a6d0c994a087ca11\", id_pilot:\"AT\"},{_value:\"fd3f7822dbd942ed8e088edfeb9d4203\", id_pilot:\"AT\"},{_value:\"faf0deee432c40839f7cc5729a449142\", id_pilot:\"PL\"},{_value:\"2f6a467e2289466d84b4eac0169e086c\", id_pilot:\"PL\"},{_value:\"efd9507f36c0485581687cd8d403d0d4\", id_pilot:\"PL\"},{_value:\"363e2a1a91a04bde913cd971b83944aa\", id_pilot:\"PL\"},{_value:\"7c78e5ad720a4cb99a98e2cd10f479a8\", id_pilot:\"PL\"},{_value:\"ea5e71aefe2046d09cd90312215203af\", id_pilot:\"PL\"},{_value:\"7e8e5274920c43348d02b494d4b6745e\", id_pilot:\"PL\"},{_value:\"3aa13cfecfb447dfa2740042ba995b73\", id_pilot:\"PL\"},{_value:\"9c8551abf84c4579b7f6c069c4735024\", id_pilot:\"PL\"},{_value:\"76670ed3117e4450bee7a19774c0d3c5\", id_pilot:\"PL\"},{_value:\"13697fbf40d84f849b0f923c6651ef85\", id_pilot:\"PL\"},{_value:\"f19675b4c9d24ee19d557d7131c9f888\", id_pilot:\"PL\"},{_value:\"92a2f66b4dda4141a1b6dfe87d01c620\", id_pilot:\"PL\"},{_value:\"44a0fa554fc742868649267bff169d64\", id_pilot:\"PL\"},{_value:\"5244292b09a84b85aa90676fa699efdb\", id_pilot:\"PL\"},{_value:\"606f00e8618542348f97c2daae4f1d11\", id_pilot:\"PL\"},{_value:\"7b89e19ae4824d4c9b5fd7ab7aba8d5d\", id_pilot:\"PL\"},{_value:\"7d7ca2d535c84eb59551722e12c7512c\", id_pilot:\"PL\"},{_value:\"bf24586e7b5a4cbbabe06573ed090a74\", id_pilot:\"PL\"},{_value:\"65c667f2ec754df1ab2bcecec514e6da\", id_pilot:\"PL\"},{_value:\"46b24bc050d94fcc96fee9acd7d08d5e\", id_pilot:\"PL\"},{_value:\"14e56cc1368c4346ae7a210bfa94503c\", id_pilot:\"PL\"},{_value:\"ac09dac4ff6a47a6aac1c723f24e4c7b\", id_pilot:\"PL\"},{_value:\"f57b36bffc8449d5895dd7c9a6f0f5a3\", id_pilot:\"PL\"},{_value:\"7c84fc60f5244fa9ac037b3e029d2c83\", id_pilot:\"DE\"},{_value:\"a3b3f9c69e49443ab56c301058d588c7\", id_pilot:\"DE\"},{_value:\"7f8e2ddbf934494bb82cada25430e76b\", id_pilot:\"DE\"},{_value:\"fe40968aa5464b4f8845432ce0e7a9a4\", id_pilot:\"DE\"},{_value:\"ef6bffdd7801f52e64f75c4c784032323b88ca12\", id_pilot:\"ES\"},{_value:\"d1978a72b7dae71aaddea7de454af22d73c4e352\", id_pilot:\"ES\"},{_value:\"e5dbaaa38da2345c6bdcac2e35ef0acb9ad668a8\", id_pilot:\"ES\"},{_value:\"299d7e6d353a7d723625bc18d2dc29a477dad322\", id_pilot:\"ES\"},{_value:\"67fa138f592a2d5071d868ab1428f5134e643308\", id_pilot:\"ES\"},{_value:\"2c37cd91a03fb746cc27e7dc4a65d4fcb9f2d55f\", id_pilot:\"ES\"},{_value:\"eab3821c2ab5dd0e2e112b88beac864865316492\", id_pilot:\"ES\"},{_value:\"5db72aa87d35f0537ad68aa78f7cc57a5a8f7665\", id_pilot:\"ES\"},{_value:\"e7493664d4311199f1c75b9f7a86c95c55075503\", id_pilot:\"ES\"},{_value:\"a791462d447ca4418514b826d7a1f100f841eb59\", id_pilot:\"ES\"},{_value:\"2b6b4e52b50c73e52d174c67a51f72d6fa639855\", id_pilot:\"ES\"},{_value:\"079cc12e0dcb0606925c903eded2629973cee9db\", id_pilot:\"ES\"},{_value:\"ec9ba2d246319b0f77744148ca92f2e4295bf8a0\", id_pilot:\"ES\"},{_value:\"88a437e4b8c3dadc1f71d50cd118387db7d8b452\", id_pilot:\"ES\"},{_value:\"0afe365435c06d2250b22bc86cb069e43296976c\", id_pilot:\"ES\"},{_value:\"4eefa917ae2f7f6738eb67159cd136ced95c897c\", id_pilot:\"ES\"},{_value:\"61e5a7a1933948efac8155fe3c4956c0\", id_pilot:\"AT\"},{_value:\"70685bc15da1ff03c083eb2e7a3f7b5da22242a9\", id_pilot:\"ES\"},{_value:\"3d9acb49e21f3d5b4f5f739c199e6066b35f3ca5\", id_pilot:\"ES\"},{_value:\"ebd9bcd0238a9b55a920ee1a686d1d1f17ae0fec\", id_pilot:\"ES\"},{_value:\"1860ce6c17327f8112ec27f7a7b97f884bd1b7a7\", id_pilot:\"ES\"},{_value:\"45f505bc1c61a37489f77101ba5b15b373ccaa12\", id_pilot:\"ES\"},{_value:\"27f8b6a5322e42f2f2198252923dd498b8f9bd11\", id_pilot:\"ES\"},{_value:\"7bead216d925d7c8ba083f521adb1fedeede08f8\", id_pilot:\"ES\"},{_value:\"2bcabd4de178613c8985686c0267a96a44344349\", id_pilot:\"ES\"},{_value:\"340aae30bf2ce883f0c3d5efad7bc9ce9c2b44ab\", id_pilot:\"ES\"},{_value:\"3418dfaf9268fdfc1d7a1cd75b2381e764c83f8b\", id_pilot:\"ES\"},{_value:\"cc81645daf674099771ad42d212c525701c3b101\", id_pilot:\"ES\"},{_value:\"2844090fb283e868fd2076c58d426d5dfc940c73\", id_pilot:\"ES\"},{_value:\"f7ce9b171565510bd2bd26915cef228bc062e959\", id_pilot:\"ES\"},{_value:\"77fe82a483c2f5c1b40924d86610534a6a48f0f5\", id_pilot:\"ES\"},{_value:\"d5da21b947e31200f623dd87a4a9ede5f8d24493\", id_pilot:\"ES\"},{_value:\"65f85b076521ba4c0c6fcb70f2fe1ec92e1f16c2\", id_pilot:\"ES\"},{_value:\"717a1d1a2e7747a36b83da57b9b0816f987bd180\", id_pilot:\"ES\"},{_value:\"e5e51ac85b6bdd92f4cd0017e356615840eb3ed7\", id_pilot:\"ES\"},{_value:\"c079bee45af1c79bfdf38139d421e5d31f1cc974\", id_pilot:\"ES\"},{_value:\"f30ab18927a82e5820b1edf26715f0c70c67771c\", id_pilot:\"ES\"},{_value:\"d3516d5f0a18300a70382904d0409460b15fae6b\", id_pilot:\"ES\"},{_value:\"ea1ca09f0056d3c2d68075931593eb1d8d595853\", id_pilot:\"ES\"},{_value:\"f183191fd9fce631e3ed460a0c0fc4c841ed53ca\", id_pilot:\"ES\"},{_value:\"ddde2c8f40b954d52f38483053f4ce3baafb1823\", id_pilot:\"ES\"},{_value:\"4bd6a7b22400abcc5bafc1f271003b725d945307\", id_pilot:\"ES\"},{_value:\"5c40025829a87ae978c1c4408bebf5da9b67fb11\", id_pilot:\"NO\"},{_value:\"aa447c54f6541ae64d35f313058f3e7dfeefeaa3\", id_pilot:\"NO\"},{_value:\"2ce4178250c108b0620884224f3063ce6542b1f2\", id_pilot:\"NO\"},{_value:\"c01245d137d99d2d03fbf0c63434ce3d6f396362\", id_pilot:\"NO\"},{_value:\"7fdf1f1548e91c929eec7fc5473dc666fca2e733\", id_pilot:\"NO\"},{_value:\"4e1bc2669de9b61d083fda74d9c32d8527c5574e\", id_pilot:\"NO\"},{_value:\"306c0c5052cc88aad3ee63088f6aea21587a2ac0\", id_pilot:\"NO\"},{_value:\"88d66b6b992c7047418bfdf9c1f5ba648b5cc9d3\", id_pilot:\"NO\"},{_value:\"de9d984a421185bb4ef34bc8d4b5ba284a2abba5\", id_pilot:\"NO\"},{_value:\"d886da124d82f22a1212ebf1e21cd60d787ae19f\", id_pilot:\"NO\"},{_value:\"9bb1e7c7403a8cea7b9ae7fb5e938d2f03e3d0b2\", id_pilot:\"NO\"},{_value:\"a42d4942f430ec529e2b65e118f9ccda399ed7a5\", id_pilot:\"NO\"},{_value:\"8298966cce813fe98a40306fd7fe63654e407949\", id_pilot:\"ES\"},{_value:\"eb871fd1e5440fad62bff7e18512edea8fdfd574\", id_pilot:\"ES\"},{_value:\"920450473d9037486d8fa9f885c689d92ea29295\", id_pilot:\"ES\"},{_value:\"57f57e7c5af2a758368e7b1aef1b3e8612248df3\", id_pilot:\"ES\"},{_value:\"1d31fa1a09d16f51d6724d3d14dd996b20566d4e\", id_pilot:\"ES\"},{_value:\"5b3add310ab45c032082e43ab23d9bc4983143c5\", id_pilot:\"ES\"},{_value:\"4491ba5217800f6b2884818d76fd7ddcb253890e\", id_pilot:\"ES\"},{_value:\"668350830f875321e80ed4f378fc447c6eb2fbff\", id_pilot:\"ES\"},{_value:\"6a0f879d9f8c4c0282f2e897f125aea2adbb7bbf\", id_pilot:\"ES\"},{_value:\"33b56be8b2913f62bd941e51d841ab200cf93635\", id_pilot:\"ES\"},{_value:\"a500f610fb6f0b4057444f1540628f2e14816869\", id_pilot:\"ES\"},{_value:\"014c10b7f6f94f322805ca399911c5f4778b2766\", id_pilot:\"ES\"},{_value:\"f88eb2b4073a87b06c9ece1b1fab6a9b4ba6b920\", id_pilot:\"ES\"},{_value:\"d39bd88093250257ac2d5b4748df99395098f01b\", id_pilot:\"ES\"},{_value:\"12bd15f145083a88c5d6aba95cd912f3d0075383\", id_pilot:\"ES\"},{_value:\"a050a319fb4c44292794006fbc7a8807586df16d\", id_pilot:\"ES\"},{_value:\"349f7dc1d3a150adb5886937e68edf0766c0aa9c\", id_pilot:\"ES\"},{_value:\"fd20a37e17571cd84c398b2f6d495fb5aa17961d\", id_pilot:\"ES\"},{_value:\"5294731d520b8ba06b3eef7dcfc6a7dc5a338215\", id_pilot:\"ES\"},{_value:\"e9507d41ce50f1521c122a27b7596caaeee28c4a\", id_pilot:\"ES\"},{_value:\"d7fa4cfd9b9f1e50dad7c153603d6190c2c1d4fc\", id_pilot:\"ES\"},{_value:\"86c8d4d5b50ba839b3725fde9d19ca29aa47323e\", id_pilot:\"ES\"},{_value:\"ab250aa6155042a38fa2997e89c6c8b6\", id_pilot:\"AT\"},{_value:\"35a9c0825cda4c72974ad52c31602639\", id_pilot:\"AT\"},{_value:\"3129e3f5b8384f0da9be98d86ff2eb50\", id_pilot:\"DE\"},{_value:\"21ca5438455640b4a41491b830f2b71e\", id_pilot:\"DE\"},{_value:\"78c02da478d74af29d44db059a712e93\", id_pilot:\"DE\"},{_value:\"9c9d40a4849748e698132fc0496fc8a7\", id_pilot:\"DE\"},{_value:\"3d5a2b93a2584fc49d453e23c331c896\", id_pilot:\"DE\"},{_value:\"f0936f9b13b24cd4a0e3f74e80023ed7\", id_pilot:\"DE\"},{_value:\"46fed3d602aa4705bfc8e0379d492a9e\", id_pilot:\"AT\"},{_value:\"a6973c3bf15e4734ac25dfe5c3d3fb61\", id_pilot:\"AT\"},{_value:\"e90c5e64600a4cb2afd88244dabc7064\", id_pilot:\"AT\"},{_value:\"060753d3a18e4209a2948823c39dadba\", id_pilot:\"AT\"},{_value:\"511f867529b344718c0aeb449e72e1fc\", id_pilot:\"AT\"},{_value:\"0891f5ae85114fb6a96abc0fcf2355a2\", id_pilot:\"AT\"},{_value:\"39d5a4df371e461f8a10d9a84209d321\", id_pilot:\"AT\"},{_value:\"4fd6c927108d4e3d845bdd9ef3bf2b4c\", id_pilot:\"AT\"},{_value:\"2e288eb980e7475ab07f393c2741dba6\", id_pilot:\"DE\"},{_value:\"28e689814ca14b6a9a11769305bd99c8\", id_pilot:\"AT\"},{_value:\"e30ea4d0fb64401bb59fc5275fd1143f\", id_pilot:\"AT\"},{_value:\"b1e7346cb8d9f9faa172d96c1447471f5fb3435a\", id_pilot:\"ES\"},{_value:\"916dc14e65367005580e86eadfe47ea9c94ed08f\", id_pilot:\"ES\"},{_value:\"77e5337aaa9076d72f64867933ba31bda883c377\", id_pilot:\"ES\"},{_value:\"2dd519e358dc27407d5954efbf6deb700bf5f8a7\", id_pilot:\"ES\"},{_value:\"c68a0a7cc2ba131d15eccc59ff44dd0d94b6caf6\", id_pilot:\"ES\"},{_value:\"a9940ec5241a0d2ea50863acc0f1761dfb9cc4b2\", id_pilot:\"ES\"},{_value:\"af3ece28ea735256dec8ddd5e5d04243c67fbd16\", id_pilot:\"ES\"},{_value:\"007c31d7ce23859af3e05f51a0e7f166b7775fee\", id_pilot:\"ES\"},{_value:\"9c86e9adf8283d075d0e8aa7f59d9e9d0d771575\", id_pilot:\"ES\"},{_value:\"1506a0c8d89aa94e6c8b7044ce3c270303eeed70\", id_pilot:\"ES\"},{_value:\"fade91271651d7150fef6424eea22420a92ee823\", id_pilot:\"ES\"},{_value:\"b3ea221de582bafce3f9bb1cb158737043284c53\", id_pilot:\"ES\"},{_value:\"378507875b9216cd41b1be7dcc3152c37704e667\", id_pilot:\"ES\"},{_value:\"009c848087c2dae24319e84feed2811df8b911f0\", id_pilot:\"ES\"},{_value:\"9b537854fa6ed65ed699e42b51567ad69fc60d85\", id_pilot:\"ES\"},{_value:\"efe6d3751fdbb9a1f9a19a2ae7ae85549093af2d\", id_pilot:\"ES\"},{_value:\"2ce9fe80030b6195d76086edd913f2c134c1db40\", id_pilot:\"ES\"},{_value:\"b16b2304bfd93808536a762bdfaf3f512c01bf45\", id_pilot:\"ES\"},{_value:\"4da0169bd8e44627c4245c5ffd25ab72f439b2ca\", id_pilot:\"ES\"},{_value:\"04d2482da5955274fea83e6ad8d4768491689d96\", id_pilot:\"ES\"},{_value:\"1d8828a40b5a5be9068d36eb7f239d153f41c316\", id_pilot:\"ES\"},{_value:\"d32dbcdd5bd63187fe212f16f4ca88201f3ee747\", id_pilot:\"ES\"},{_value:\"160381eae7472c8edb17850f9f0214af8dc4e0ce\", id_pilot:\"ES\"},{_value:\"bf11c21ef9ea51bd60fb0027d103e0e013a92e36\", id_pilot:\"ES\"},{_value:\"0765cf7c331c1b591c24fd4cf890111c605cefee\", id_pilot:\"ES\"},{_value:\"aa839bcc736c01c5653e9e1a65c19ad24ae1303a\", id_pilot:\"ES\"},{_value:\"ddf7865bf4a8be2478199c281cce621c7137f1e7\", id_pilot:\"ES\"},{_value:\"2d774cebcaab3ea4655b7b77ebadf4fe5dbfe4f9\", id_pilot:\"ES\"},{_value:\"f43c2e08ec1d3266365820c905a33fa23ce19115\", id_pilot:\"ES\"},{_value:\"ccc1bc8b2d1f5c01c6c7aa256d62d744a95c9215\", id_pilot:\"ES\"},{_value:\"4c670bb06e6676c9ee1ce06dc048f59c14d01f17\", id_pilot:\"ES\"},{_value:\"3fd875ee331833507383fa6edb19979a66c7248f\", id_pilot:\"ES\"},{_value:\"375108f9dd92655d8ab50a48a2ef64f502b3387d\", id_pilot:\"ES\"},{_value:\"68d257dc912ae3cb04f8302e1a3059bbcef802fc\", id_pilot:\"ES\"},{_value:\"583e1f8436dc0a191910d14590a55dbb19d1d0f0\", id_pilot:\"ES\"},{_value:\"f45478645ce8a1dd89120c4b7b13e6c149b2912e\", id_pilot:\"ES\"},{_value:\"fc4191e360dd43f69817b3613fe8c64e\", id_pilot:\"AT\"},{_value:\"99471c8a19ca4039b6cda4b70eb4bf2d\", id_pilot:\"AT\"},{_value:\"62082b184b19f22c27a437ef6fc087dcadf2e1aa\", id_pilot:\"ES\"},{_value:\"e70695004bd43ec815958aa654c676bbcf1e4cd9\", id_pilot:\"ES\"}",
+          "value": "{_value:\"eb45cb8d8168b113b26aaa8e187b71132909630f\", id_pilot:\"ES\"},{_value:\"eb58937e03f00c2cb6ab77d8eed70a897c8abd88\", id_pilot:\"ES\"},{_value:\"66255023aab6c485323d000d83eb5fdaae7fcb61\", id_pilot:\"ES\"},{_value:\"9446142fc1699f6e5dda7a9b5d58b62225c571b8\", id_pilot:\"ES\"},{_value:\"7566eac96f10473d05eb62b5c1f40eca429c7859\", id_pilot:\"ES\"},{_value:\"1a9dda1dc61e36cb9fb6a53d996a9577fcdf6f2f\", id_pilot:\"ES\"},{_value:\"d2493664efbc5e3c409736c3f1f8d31d0b054fa0\", id_pilot:\"ES\"},{_value:\"0152c5c067de460993de2190b1be64bb\", id_pilot:\"AT\"},{_value:\"22fcc31f6e734be4a830960d34ed116e\", id_pilot:\"AT\"},{_value:\"0199a74e0cd73542edc8ef2f9b9f52c0cc27befb\", id_pilot:\"ES\"},{_value:\"bf5e3d06824529b782a9f8e09536066748347433\", id_pilot:\"ES\"},{_value:\"ed5a0df05013a990a6bd02197dbd02ded8956e99\", id_pilot:\"ES\"},{_value:\"f51f7dc539fb9686872e1ec4c48076579249f7e2\", id_pilot:\"ES\"},{_value:\"51a03d63fd5934b46540bed17d85ee5ff504d024\", id_pilot:\"ES\"},{_value:\"eb147794a1e1aa94d543ea43a69853ffcec4262b\", id_pilot:\"ES\"},{_value:\"7bd667d3d2829ad1a0dd9819a9ddf5bb9b909e6f\", id_pilot:\"ES\"},{_value:\"283ab62f3cc0beaf012a4c5268b4478cde2864f5\", id_pilot:\"ES\"},{_value:\"ddcff975f3948f76704d57a37bebcd45bbbe3df0\", id_pilot:\"ES\"},{_value:\"bfe141482a5500cf06fcadc0470123ef4a97bf09\", id_pilot:\"ES\"},{_value:\"ecfcfaf7b53b4e80a4bf1aee42da4b4c\", id_pilot:\"AT\"},{_value:\"7362154a0788460abfeecd0b00839047\", id_pilot:\"AT\"},{_value:\"185d711f0b462fbe207d3fa85524bcaa72267a70\", id_pilot:\"ES\"},{_value:\"8faf4e12f5b9c5fcfceaaae49fcfd7bb4993b64a\", id_pilot:\"ES\"},{_value:\"eff0b3aba9d934741ee5b65147c2f62cc6834182\", id_pilot:\"ES\"},{_value:\"68e49432fa36e287b088d8f72e0ea2f1878c5763\", id_pilot:\"ES\"},{_value:\"e5d5ee40838cd8491fe278954ac4a8baf3cdc049\", id_pilot:\"ES\"},{_value:\"1cac5b8f75739cdc3be102dd1abb232353eaba69\", id_pilot:\"ES\"},{_value:\"a289aeb0a9fffb7ca8bf3827f63c912d618dbfe5\", id_pilot:\"ES\"},{_value:\"a250ed281dd519353c2a2c18b81f9d4b66f4d95e\", id_pilot:\"ES\"},{_value:\"b00fb56b65bca5065c6c5920dcb45c02311e9574\", id_pilot:\"ES\"},{_value:\"7352fafe350b4a708b68374e4e5963e4\", id_pilot:\"AT\"},{_value:\"189829df00864bf7b4f46207a5a29007\", id_pilot:\"AT\"},{_value:\"3dd99c15dc1e4f6495acaa80baebea085fe7be87\", id_pilot:\"ES\"},{_value:\"c605ca720db87308191a492dabff396c5a6e1acb\", id_pilot:\"ES\"},{_value:\"f89e36712eff17b509957936f9abf4dcb3d6109a\", id_pilot:\"ES\"},{_value:\"6b6bb33987fef1aacada9c2c2466e14aa36db0c1\", id_pilot:\"ES\"},{_value:\"dacf3746f79cddd76461d51ae23b29656d908181\", id_pilot:\"ES\"},{_value:\"3f558b68f0d159c5a2aa1438280320cdf5fd78ba\", id_pilot:\"ES\"},{_value:\"722480c8b87a92e6ac34156fac8d68e83010dfc8\", id_pilot:\"ES\"},{_value:\"053e95cb7b4c92ede59f71a1ad3350a393480a6a\", id_pilot:\"ES\"},{_value:\"1d4f23a14095a9240700706af66b7bea86ae2692\", id_pilot:\"ES\"},{_value:\"62f81d2413f04359bdb00b680cb7ac14\", id_pilot:\"AT\"},{_value:\"3e851716aa9f48fe939c2307513744ce\", id_pilot:\"AT\"},{_value:\"4760e271b056a3dbd1b844dab8cfb54a89b5c2a1\", id_pilot:\"ES\"},{_value:\"cb9cd69a003e8ec88f57ea27be076135cac6d414\", id_pilot:\"ES\"},{_value:\"550460c01d82de2c9d439ac457c604e557ee40b7\", id_pilot:\"ES\"},{_value:\"c5d76f8b0fcd4e62c90456763bbee482a9f798fc\", id_pilot:\"ES\"},{_value:\"dc8941970f4cff43122dec68b32445c0f87ef40c\", id_pilot:\"ES\"},{_value:\"9554828be4027d2feb140df780bc63329221a745\", id_pilot:\"ES\"},{_value:\"53eeb0bd6bf1741b1da9509a9516bf4018dbf98e\", id_pilot:\"ES\"},{_value:\"1ce45a0743ae32ced478ae34e2a92740f02d3b12\", id_pilot:\"ES\"},{_value:\"69de0189ef22462fb37238327cd32ae9\", id_pilot:\"AT\"},{_value:\"1e578288e756497c99e6f9166ad5bd3e\", id_pilot:\"AT\"},{_value:\"4da9ed4012c77e4fed6d4bcb35ee035805e09dff\", id_pilot:\"ES\"},{_value:\"d04ddb2ab94fdf8f3c2de06537570efd6b233bae\", id_pilot:\"ES\"},{_value:\"3178b2ff55a845a7b592fb133c8e2d5d\", id_pilot:\"AT\"},{_value:\"7913460073724b93a98cc91e5a73c806\", id_pilot:\"AT\"},{_value:\"49870edd785c4fd48cc92fa9f5df200e\", id_pilot:\"AT\"},{_value:\"ed0cdc679c694547af0537ee01f1c99a\", id_pilot:\"AT\"},{_value:\"831c4241d4e341d598a5eafffa338ffa\", id_pilot:\"AT\"},{_value:\"d53c892651664255b587fd518dfb9c2e\", id_pilot:\"AT\"},{_value:\"d96e50c62f2d48d2895d14b9cda85201\", id_pilot:\"AT\"},{_value:\"93b7034384834895a37ccbba725158f4\", id_pilot:\"AT\"},{_value:\"a4f308f947094deab625d3bed86c1c43\", id_pilot:\"AT\"},{_value:\"b9e53b9ab41f47dd9ccb286ff056939d\", id_pilot:\"AT\"},{_value:\"f07601ac9ce2492da9f677f2b81ba9a1\", id_pilot:\"AT\"},{_value:\"18137896bcfc4d1a9683e76be53ef39a\", id_pilot:\"AT\"},{_value:\"a2e9249bb3254afab89ffd33f458db60\", id_pilot:\"PL\"},{_value:\"0775e2e5ab8d4dfb811a30b3f60aa01f\", id_pilot:\"PL\"},{_value:\"0fd30091a2cb49f58c9e54f037747360\", id_pilot:\"PL\"},{_value:\"a8c1ba434d064424ae109c83561f9e49\", id_pilot:\"PL\"},{_value:\"bcf5a79f932f4f0ebd07d61125174a1a\", id_pilot:\"PL\"},{_value:\"eb015163ec56471f9f4df9ac0c99bf16\", id_pilot:\"PL\"},{_value:\"237e304839bd4df3a6d0c994a087ca11\", id_pilot:\"AT\"},{_value:\"fd3f7822dbd942ed8e088edfeb9d4203\", id_pilot:\"AT\"},{_value:\"faf0deee432c40839f7cc5729a449142\", id_pilot:\"PL\"},{_value:\"2f6a467e2289466d84b4eac0169e086c\", id_pilot:\"PL\"},{_value:\"efd9507f36c0485581687cd8d403d0d4\", id_pilot:\"PL\"},{_value:\"363e2a1a91a04bde913cd971b83944aa\", id_pilot:\"PL\"},{_value:\"7c78e5ad720a4cb99a98e2cd10f479a8\", id_pilot:\"PL\"},{_value:\"ea5e71aefe2046d09cd90312215203af\", id_pilot:\"PL\"},{_value:\"7e8e5274920c43348d02b494d4b6745e\", id_pilot:\"PL\"},{_value:\"3aa13cfecfb447dfa2740042ba995b73\", id_pilot:\"PL\"},{_value:\"9c8551abf84c4579b7f6c069c4735024\", id_pilot:\"PL\"},{_value:\"76670ed3117e4450bee7a19774c0d3c5\", id_pilot:\"PL\"},{_value:\"13697fbf40d84f849b0f923c6651ef85\", id_pilot:\"PL\"},{_value:\"f19675b4c9d24ee19d557d7131c9f888\", id_pilot:\"PL\"},{_value:\"92a2f66b4dda4141a1b6dfe87d01c620\", id_pilot:\"PL\"},{_value:\"44a0fa554fc742868649267bff169d64\", id_pilot:\"PL\"},{_value:\"5244292b09a84b85aa90676fa699efdb\", id_pilot:\"PL\"},{_value:\"606f00e8618542348f97c2daae4f1d11\", id_pilot:\"PL\"},{_value:\"7b89e19ae4824d4c9b5fd7ab7aba8d5d\", id_pilot:\"PL\"},{_value:\"7d7ca2d535c84eb59551722e12c7512c\", id_pilot:\"PL\"},{_value:\"bf24586e7b5a4cbbabe06573ed090a74\", id_pilot:\"PL\"},{_value:\"65c667f2ec754df1ab2bcecec514e6da\", id_pilot:\"PL\"},{_value:\"46b24bc050d94fcc96fee9acd7d08d5e\", id_pilot:\"PL\"},{_value:\"14e56cc1368c4346ae7a210bfa94503c\", id_pilot:\"PL\"},{_value:\"ac09dac4ff6a47a6aac1c723f24e4c7b\", id_pilot:\"PL\"},{_value:\"f57b36bffc8449d5895dd7c9a6f0f5a3\", id_pilot:\"PL\"},{_value:\"7c84fc60f5244fa9ac037b3e029d2c83\", id_pilot:\"DE\"},{_value:\"a3b3f9c69e49443ab56c301058d588c7\", id_pilot:\"DE\"},{_value:\"7f8e2ddbf934494bb82cada25430e76b\", id_pilot:\"DE\"},{_value:\"fe40968aa5464b4f8845432ce0e7a9a4\", id_pilot:\"DE\"},{_value:\"ef6bffdd7801f52e64f75c4c784032323b88ca12\", id_pilot:\"ES\"},{_value:\"d1978a72b7dae71aaddea7de454af22d73c4e352\", id_pilot:\"ES\"},{_value:\"e5dbaaa38da2345c6bdcac2e35ef0acb9ad668a8\", id_pilot:\"ES\"},{_value:\"299d7e6d353a7d723625bc18d2dc29a477dad322\", id_pilot:\"ES\"},{_value:\"67fa138f592a2d5071d868ab1428f5134e643308\", id_pilot:\"ES\"},{_value:\"2c37cd91a03fb746cc27e7dc4a65d4fcb9f2d55f\", id_pilot:\"ES\"},{_value:\"eab3821c2ab5dd0e2e112b88beac864865316492\", id_pilot:\"ES\"},{_value:\"5db72aa87d35f0537ad68aa78f7cc57a5a8f7665\", id_pilot:\"ES\"},{_value:\"e7493664d4311199f1c75b9f7a86c95c55075503\", id_pilot:\"ES\"},{_value:\"a791462d447ca4418514b826d7a1f100f841eb59\", id_pilot:\"ES\"},{_value:\"2b6b4e52b50c73e52d174c67a51f72d6fa639855\", id_pilot:\"ES\"},{_value:\"079cc12e0dcb0606925c903eded2629973cee9db\", id_pilot:\"ES\"},{_value:\"ec9ba2d246319b0f77744148ca92f2e4295bf8a0\", id_pilot:\"ES\"},{_value:\"88a437e4b8c3dadc1f71d50cd118387db7d8b452\", id_pilot:\"ES\"},{_value:\"0afe365435c06d2250b22bc86cb069e43296976c\", id_pilot:\"ES\"},{_value:\"4eefa917ae2f7f6738eb67159cd136ced95c897c\", id_pilot:\"ES\"},{_value:\"61e5a7a1933948efac8155fe3c4956c0\", id_pilot:\"AT\"},{_value:\"70685bc15da1ff03c083eb2e7a3f7b5da22242a9\", id_pilot:\"ES\"},{_value:\"3d9acb49e21f3d5b4f5f739c199e6066b35f3ca5\", id_pilot:\"ES\"},{_value:\"ebd9bcd0238a9b55a920ee1a686d1d1f17ae0fec\", id_pilot:\"ES\"},{_value:\"1860ce6c17327f8112ec27f7a7b97f884bd1b7a7\", id_pilot:\"ES\"},{_value:\"45f505bc1c61a37489f77101ba5b15b373ccaa12\", id_pilot:\"ES\"},{_value:\"27f8b6a5322e42f2f2198252923dd498b8f9bd11\", id_pilot:\"ES\"},{_value:\"7bead216d925d7c8ba083f521adb1fedeede08f8\", id_pilot:\"ES\"},{_value:\"2bcabd4de178613c8985686c0267a96a44344349\", id_pilot:\"ES\"},{_value:\"340aae30bf2ce883f0c3d5efad7bc9ce9c2b44ab\", id_pilot:\"ES\"},{_value:\"3418dfaf9268fdfc1d7a1cd75b2381e764c83f8b\", id_pilot:\"ES\"},{_value:\"cc81645daf674099771ad42d212c525701c3b101\", id_pilot:\"ES\"},{_value:\"2844090fb283e868fd2076c58d426d5dfc940c73\", id_pilot:\"ES\"},{_value:\"f7ce9b171565510bd2bd26915cef228bc062e959\", id_pilot:\"ES\"},{_value:\"77fe82a483c2f5c1b40924d86610534a6a48f0f5\", id_pilot:\"ES\"},{_value:\"d5da21b947e31200f623dd87a4a9ede5f8d24493\", id_pilot:\"ES\"},{_value:\"65f85b076521ba4c0c6fcb70f2fe1ec92e1f16c2\", id_pilot:\"ES\"},{_value:\"717a1d1a2e7747a36b83da57b9b0816f987bd180\", id_pilot:\"ES\"},{_value:\"e5e51ac85b6bdd92f4cd0017e356615840eb3ed7\", id_pilot:\"ES\"},{_value:\"c079bee45af1c79bfdf38139d421e5d31f1cc974\", id_pilot:\"ES\"},{_value:\"f30ab18927a82e5820b1edf26715f0c70c67771c\", id_pilot:\"ES\"},{_value:\"d3516d5f0a18300a70382904d0409460b15fae6b\", id_pilot:\"ES\"},{_value:\"ea1ca09f0056d3c2d68075931593eb1d8d595853\", id_pilot:\"ES\"},{_value:\"f183191fd9fce631e3ed460a0c0fc4c841ed53ca\", id_pilot:\"ES\"},{_value:\"ddde2c8f40b954d52f38483053f4ce3baafb1823\", id_pilot:\"ES\"},{_value:\"4bd6a7b22400abcc5bafc1f271003b725d945307\", id_pilot:\"ES\"},{_value:\"5c40025829a87ae978c1c4408bebf5da9b67fb11\", id_pilot:\"NO\"},{_value:\"aa447c54f6541ae64d35f313058f3e7dfeefeaa3\", id_pilot:\"NO\"},{_value:\"2ce4178250c108b0620884224f3063ce6542b1f2\", id_pilot:\"NO\"},{_value:\"c01245d137d99d2d03fbf0c63434ce3d6f396362\", id_pilot:\"NO\"},{_value:\"7fdf1f1548e91c929eec7fc5473dc666fca2e733\", id_pilot:\"NO\"},{_value:\"4e1bc2669de9b61d083fda74d9c32d8527c5574e\", id_pilot:\"NO\"},{_value:\"306c0c5052cc88aad3ee63088f6aea21587a2ac0\", id_pilot:\"NO\"},{_value:\"88d66b6b992c7047418bfdf9c1f5ba648b5cc9d3\", id_pilot:\"NO\"},{_value:\"de9d984a421185bb4ef34bc8d4b5ba284a2abba5\", id_pilot:\"NO\"},{_value:\"d886da124d82f22a1212ebf1e21cd60d787ae19f\", id_pilot:\"NO\"},{_value:\"9bb1e7c7403a8cea7b9ae7fb5e938d2f03e3d0b2\", id_pilot:\"NO\"},{_value:\"a42d4942f430ec529e2b65e118f9ccda399ed7a5\", id_pilot:\"NO\"},{_value:\"8298966cce813fe98a40306fd7fe63654e407949\", id_pilot:\"ES\"},{_value:\"eb871fd1e5440fad62bff7e18512edea8fdfd574\", id_pilot:\"ES\"},{_value:\"920450473d9037486d8fa9f885c689d92ea29295\", id_pilot:\"ES\"},{_value:\"57f57e7c5af2a758368e7b1aef1b3e8612248df3\", id_pilot:\"ES\"},{_value:\"1d31fa1a09d16f51d6724d3d14dd996b20566d4e\", id_pilot:\"ES\"},{_value:\"5b3add310ab45c032082e43ab23d9bc4983143c5\", id_pilot:\"ES\"},{_value:\"4491ba5217800f6b2884818d76fd7ddcb253890e\", id_pilot:\"ES\"},{_value:\"668350830f875321e80ed4f378fc447c6eb2fbff\", id_pilot:\"ES\"},{_value:\"6a0f879d9f8c4c0282f2e897f125aea2adbb7bbf\", id_pilot:\"ES\"},{_value:\"33b56be8b2913f62bd941e51d841ab200cf93635\", id_pilot:\"ES\"},{_value:\"a500f610fb6f0b4057444f1540628f2e14816869\", id_pilot:\"ES\"},{_value:\"014c10b7f6f94f322805ca399911c5f4778b2766\", id_pilot:\"ES\"},{_value:\"f88eb2b4073a87b06c9ece1b1fab6a9b4ba6b920\", id_pilot:\"ES\"},{_value:\"d39bd88093250257ac2d5b4748df99395098f01b\", id_pilot:\"ES\"},{_value:\"12bd15f145083a88c5d6aba95cd912f3d0075383\", id_pilot:\"ES\"},{_value:\"a050a319fb4c44292794006fbc7a8807586df16d\", id_pilot:\"ES\"},{_value:\"349f7dc1d3a150adb5886937e68edf0766c0aa9c\", id_pilot:\"ES\"},{_value:\"fd20a37e17571cd84c398b2f6d495fb5aa17961d\", id_pilot:\"ES\"},{_value:\"5294731d520b8ba06b3eef7dcfc6a7dc5a338215\", id_pilot:\"ES\"},{_value:\"e9507d41ce50f1521c122a27b7596caaeee28c4a\", id_pilot:\"ES\"},{_value:\"d7fa4cfd9b9f1e50dad7c153603d6190c2c1d4fc\", id_pilot:\"ES\"},{_value:\"86c8d4d5b50ba839b3725fde9d19ca29aa47323e\", id_pilot:\"ES\"},{_value:\"ab250aa6155042a38fa2997e89c6c8b6\", id_pilot:\"AT\"},{_value:\"35a9c0825cda4c72974ad52c31602639\", id_pilot:\"AT\"},{_value:\"3129e3f5b8384f0da9be98d86ff2eb50\", id_pilot:\"DE\"},{_value:\"21ca5438455640b4a41491b830f2b71e\", id_pilot:\"DE\"},{_value:\"78c02da478d74af29d44db059a712e93\", id_pilot:\"DE\"},{_value:\"9c9d40a4849748e698132fc0496fc8a7\", id_pilot:\"DE\"},{_value:\"3d5a2b93a2584fc49d453e23c331c896\", id_pilot:\"DE\"},{_value:\"f0936f9b13b24cd4a0e3f74e80023ed7\", id_pilot:\"DE\"},{_value:\"46fed3d602aa4705bfc8e0379d492a9e\", id_pilot:\"AT\"},{_value:\"a6973c3bf15e4734ac25dfe5c3d3fb61\", id_pilot:\"AT\"},{_value:\"e90c5e64600a4cb2afd88244dabc7064\", id_pilot:\"AT\"},{_value:\"060753d3a18e4209a2948823c39dadba\", id_pilot:\"AT\"},{_value:\"511f867529b344718c0aeb449e72e1fc\", id_pilot:\"AT\"},{_value:\"0891f5ae85114fb6a96abc0fcf2355a2\", id_pilot:\"AT\"},{_value:\"39d5a4df371e461f8a10d9a84209d321\", id_pilot:\"AT\"},{_value:\"4fd6c927108d4e3d845bdd9ef3bf2b4c\", id_pilot:\"AT\"},{_value:\"2e288eb980e7475ab07f393c2741dba6\", id_pilot:\"DE\"},{_value:\"28e689814ca14b6a9a11769305bd99c8\", id_pilot:\"AT\"},{_value:\"e30ea4d0fb64401bb59fc5275fd1143f\", id_pilot:\"AT\"},{_value:\"b1e7346cb8d9f9faa172d96c1447471f5fb3435a\", id_pilot:\"ES\"},{_value:\"916dc14e65367005580e86eadfe47ea9c94ed08f\", id_pilot:\"ES\"},{_value:\"77e5337aaa9076d72f64867933ba31bda883c377\", id_pilot:\"ES\"},{_value:\"2dd519e358dc27407d5954efbf6deb700bf5f8a7\", id_pilot:\"ES\"},{_value:\"c68a0a7cc2ba131d15eccc59ff44dd0d94b6caf6\", id_pilot:\"ES\"},{_value:\"a9940ec5241a0d2ea50863acc0f1761dfb9cc4b2\", id_pilot:\"ES\"},{_value:\"af3ece28ea735256dec8ddd5e5d04243c67fbd16\", id_pilot:\"ES\"},{_value:\"007c31d7ce23859af3e05f51a0e7f166b7775fee\", id_pilot:\"ES\"},{_value:\"9c86e9adf8283d075d0e8aa7f59d9e9d0d771575\", id_pilot:\"ES\"},{_value:\"1506a0c8d89aa94e6c8b7044ce3c270303eeed70\", id_pilot:\"ES\"},{_value:\"fade91271651d7150fef6424eea22420a92ee823\", id_pilot:\"ES\"},{_value:\"b3ea221de582bafce3f9bb1cb158737043284c53\", id_pilot:\"ES\"},{_value:\"378507875b9216cd41b1be7dcc3152c37704e667\", id_pilot:\"ES\"},{_value:\"009c848087c2dae24319e84feed2811df8b911f0\", id_pilot:\"ES\"},{_value:\"9b537854fa6ed65ed699e42b51567ad69fc60d85\", id_pilot:\"ES\"},{_value:\"efe6d3751fdbb9a1f9a19a2ae7ae85549093af2d\", id_pilot:\"ES\"},{_value:\"2ce9fe80030b6195d76086edd913f2c134c1db40\", id_pilot:\"ES\"},{_value:\"b16b2304bfd93808536a762bdfaf3f512c01bf45\", id_pilot:\"ES\"},{_value:\"4da0169bd8e44627c4245c5ffd25ab72f439b2ca\", id_pilot:\"ES\"},{_value:\"04d2482da5955274fea83e6ad8d4768491689d96\", id_pilot:\"ES\"},{_value:\"1d8828a40b5a5be9068d36eb7f239d153f41c316\", id_pilot:\"ES\"},{_value:\"d32dbcdd5bd63187fe212f16f4ca88201f3ee747\", id_pilot:\"ES\"},{_value:\"160381eae7472c8edb17850f9f0214af8dc4e0ce\", id_pilot:\"ES\"},{_value:\"bf11c21ef9ea51bd60fb0027d103e0e013a92e36\", id_pilot:\"ES\"},{_value:\"0765cf7c331c1b591c24fd4cf890111c605cefee\", id_pilot:\"ES\"},{_value:\"aa839bcc736c01c5653e9e1a65c19ad24ae1303a\", id_pilot:\"ES\"},{_value:\"ddf7865bf4a8be2478199c281cce621c7137f1e7\", id_pilot:\"ES\"},{_value:\"2d774cebcaab3ea4655b7b77ebadf4fe5dbfe4f9\", id_pilot:\"ES\"},{_value:\"f43c2e08ec1d3266365820c905a33fa23ce19115\", id_pilot:\"ES\"},{_value:\"ccc1bc8b2d1f5c01c6c7aa256d62d744a95c9215\", id_pilot:\"ES\"},{_value:\"4c670bb06e6676c9ee1ce06dc048f59c14d01f17\", id_pilot:\"ES\"},{_value:\"3fd875ee331833507383fa6edb19979a66c7248f\", id_pilot:\"ES\"},{_value:\"375108f9dd92655d8ab50a48a2ef64f502b3387d\", id_pilot:\"ES\"},{_value:\"68d257dc912ae3cb04f8302e1a3059bbcef802fc\", id_pilot:\"ES\"},{_value:\"583e1f8436dc0a191910d14590a55dbb19d1d0f0\", id_pilot:\"ES\"},{_value:\"f45478645ce8a1dd89120c4b7b13e6c149b2912e\", id_pilot:\"ES\"},{_value:\"fc4191e360dd43f69817b3613fe8c64e\", id_pilot:\"AT\"},{_value:\"99471c8a19ca4039b6cda4b70eb4bf2d\", id_pilot:\"AT\"},{_value:\"62082b184b19f22c27a437ef6fc087dcadf2e1aa\", id_pilot:\"ES\"},{_value:\"e70695004bd43ec815958aa654c676bbcf1e4cd9\", id_pilot:\"ES\"}"
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "aqdr-platform-db"
+        },
+        "definition": "SELECT string_agg('{_value:\"' || sensor_id || '\", id_pilot:\"' || pilot || '\"}', ',') \nFROM sensors",
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "sensors_stream",
+        "options": [],
+        "query": "SELECT string_agg('{_value:\"' || sensor_id || '\", id_pilot:\"' || pilot || '\"}', ',') \nFROM sensors",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "7. Monitoring Devices status",
+  "uid": "monitoring-devices-status",
+  "version": 1,
+  "weekStart": ""
+}

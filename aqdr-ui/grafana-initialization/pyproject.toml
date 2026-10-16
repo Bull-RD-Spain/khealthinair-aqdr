@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "aqdr-ui-initialization"
+version = "2.0.0"
+description = "UI subcomponent of the Air Quality Data Repository (AQDR)"
+authors = ["Alberto Acebes <alberto.acebes@eviden.net>"]
+maintainers = ["Alberto Acebes <alberto.acebes@eviden.net>"]
+readme = "../README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+python-multipart = "^0.0.19"
+pyyaml = "6.0.2"
+urllib3 = "^2.2.3"
+six = "^1.16"
+python-dateutil = "2.9.0.post0"
+pydantic = "2.10.2"
+requests = "^2.32.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-cov = "6.0.0"
+pytest-env = "^1.1.3"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+pytest-cov = "6.0.0"
+pytest-env = "^1.1.3"
+
+[tool.black]
+line-length = 79

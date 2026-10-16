@@ -1,0 +1,54 @@
+# Copyright © 2021-2026 Bull SAS
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# This file is part of work done in the K-HEALTHinAIR EU funded project.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# =============================================================================
+# K-HEALTHinAIR Mock Sensor APIs — Docker Compose (standalone)
+# =============================================================================
+# Mock for Inbiot, Qlair & Kunak APIs.
+# Runs independently from AQDR — start/stop without affecting the platform.
+#
+# Usage:
+#   docker-compose up -d          # start mock
+#   docker-compose down            # stop mock
+#
+# Then update AQDR .env to point to http://mock-sensor-apis:8888
+# =============================================================================
+
+services:
+  mock-sensor-apis:
+    build: .
+    container_name: mock-sensor-apis
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    environment:
+      MOCK_NUM_READINGS: ${MOCK_NUM_READINGS}
+      MOCK_INTERVAL_MIN: ${MOCK_INTERVAL_MIN}
+      MOCK_PORT: ${MOCK_PORT}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8888/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - khealthinair-net
+
+networks:
+  khealthinair-net:
+    external: false
+    name: khealthinair-net

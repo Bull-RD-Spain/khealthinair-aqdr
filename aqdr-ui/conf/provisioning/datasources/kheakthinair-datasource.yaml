@@ -1,0 +1,78 @@
+# Copyright © 2021-2026 Bull SAS
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# This file is part of work done in the K-HEALTHinAIR EU funded project.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+apiVersion: 1
+# https://grafana.com/docs/grafana/latest/datasources
+datasources:
+  - id: 1
+    uid: "aqdr-ts-db-flux"
+    name: "aqdr-ts-db-flux"
+    type: "influxdb"
+    url: ${KHIA_DSOURCE_URL}
+    access: "proxy"
+    isDefault: true
+    basicAuth: true
+    user: ${KHIA_DSOURCE_AUTH_USER}
+    basicAuthUser: ${KHIA_DSOURCE_AUTH_USER}
+    jsonData:
+      version: Flux
+      defaultBucket: "AIR_QUALITY"
+      organization: "K-HEALTHinAIR"
+      tlsSkipVerify: true
+      oauthPassThru: true
+      disableCompression: true
+    secureJsonData:
+      token: "${KHIA_DSOURCE_AUTH_TOKEN}"
+      basicAuthPassword: "${KHIA_DSOURCE_AUTH_PASSWORD}"
+    editable: false
+
+  - id: 2
+    uid: "aqdr-ts-db-influxql"
+    name: "aqdr-ts-db-influxql"
+    type: "influxdb"
+    url: ${KHIA_DSOURCE_URL}
+    access: "proxy"
+    isDefault: false
+    jsonData:
+      version: InfluxQL
+      organization: "K-HEALTHinAIR"
+      tlsSkipVerify: true
+      dbName: AIR_QUALITY
+      httpHeaderName1: "Authorization"
+    secureJsonData:
+      httpHeaderValue1: "Token ${KHIA_DSOURCE_AUTH_TOKEN}"
+    editable: false
+
+  - id: 3
+    uid: "aqdr-platform-db"
+    name: "aqdr-platform-db"
+    type: "postgres"
+    url: ${SENSORS_DB_HOST}
+    user: ${SENSORS_DB_USER}
+    jsonData:
+      database: ${SENSORS_DB_TABLE}
+      sslmode: "disable"
+      maxOpenConns: 100
+      maxIdleConns: 100
+      maxIdleConnsAuto: true
+      connMaxLifetime: 14400
+      postgresVersion: 1500
+      timescaledb: false
+    secureJsonData:
+      password: "${SENSORS_DB_PASSWORD}"
+    editable: false

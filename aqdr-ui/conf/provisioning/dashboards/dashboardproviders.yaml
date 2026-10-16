@@ -1,0 +1,82 @@
+# Copyright © 2021-2026 Bull SAS
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# This file is part of work done in the K-HEALTHinAIR EU funded project.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+apiVersion: 1
+providers:
+  - name: "default"
+    folder: "" # 'General' This is a reserved name and cannot be used for a folder.
+    type: file
+    disableDeletion: true
+    editable: true # Change once is decided is mature enough to avoid later edition not backed up in provisioning
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/default
+  - name: "pilot-at"
+    folder: "Austria Pilot"
+    folderUid: "pilot-at"
+    type: file
+    disableDeletion: true
+    editable: true # Change once is decided is mature enough to avoid later edition not backed up in provisioning
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/pilot-at
+  - name: "pilot-de"
+    folder: "Germany Pilot"
+    folderUid: "pilot-de"
+    type: file
+    disableDeletion: false
+    editable: true # Change once is decided is mature enough to avoid later edition not backed up in provisioning
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/pilot-de
+  - name: "pilot-nl"
+    folder: "Netherlands Pilot"
+    folderUid: "pilot-nl"
+    type: file
+    disableDeletion: false
+    editable: true # Change once is decided is mature enough to avoid later edition not backed up in provisioning
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/pilot-nl
+  - name: "pilot-no"
+    folder: "Norway Pilot"
+    folderUid: "pilot-no"
+    type: file
+    disableDeletion: false
+    editable: true # Change once is decided is mature enough to avoid later edition not backed up in provisioning
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/pilot-no
+  - name: "pilot-pl"
+    folder: "Poland Pilot"
+    folderUid: "pilot-pl"
+    type: file
+    disableDeletion: true
+    editable: true # Change once is decided is mature enough to avoid later edition not backed up in provisioning
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/pilot-pl
+  - name: "pilot-es"
+    folder: "Spain Pilot"
+    folderUid: "pilot-es"
+    type: file
+    disableDeletion: true
+    editable: true # Change once is decided is mature enough to avoid later edition not backed up in provisioning
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/pilot-es

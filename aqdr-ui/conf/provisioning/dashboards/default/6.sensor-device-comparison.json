@@ -1,0 +1,1288 @@
+{
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": {
+					"type": "grafana",
+					"uid": "-- Grafana --"
+				},
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"type": "dashboard"
+			}
+		]
+	},
+	"description": "Several panels to compare side by side the measurements of two sensor devices.",
+	"editable": true,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"links": [],
+	"liveNow": false,
+	"panels": [
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"gridPos": {
+				"h": 2,
+				"w": 24,
+				"x": 0,
+				"y": 0
+			},
+			"id": 11,
+			"options": {
+				"code": {
+					"language": "plaintext",
+					"showLineNumbers": false,
+					"showMiniMap": false
+				},
+				"content": "<style>\n  @font-face {font-family: 'Quicksand';src: url(\"public/fonts/Quicksand.woff2\") format('woff2')}\n</style>\n<div style=\"color:#548343; font-weight:bold; background-color:#b8bb62; font-size:larger;\">\n  &nbsp;Sensor device comparison\n</div>\n<div style=\"color:#548343; font-weight:normal;\">\n  Several panels to compare side by side the measurements of two sensor devices. Selecting in cascade both sensors (pilot, scenario, sub_scenario and area) helps in that search.<br/>\n  <span style=\"color:#fbcb09;\">More info about manipulating pannels in the <a href=\"/d/home/\">Home screen</a></span>\n</div>",
+				"mode": "html"
+			},
+			"pluginVersion": "10.4.3",
+			"transparent": true,
+			"type": "text"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Daily average values for selected pollutants for sensor_id1 in the dropdowns.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 25,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "linear",
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "normal"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.name}",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					}
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 7,
+				"w": 12,
+				"x": 0,
+				"y": 2
+			},
+			"id": 1,
+			"maxDataPoints": 10000,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id1:regex}$/)\r\n  |> filter(fn: (r) => r._field =~ /^${pollutants:regex}$/)\r\n  |> aggregateWindow(every: 24h, fn: mean)\r\n  ",
+					"refId": "A"
+				}
+			],
+			"title": "Daily Mean (sensor_id [$sensor_id1])",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Daily average values for selected pollutants for sensor_id2 in the dropdowns.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 25,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "linear",
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "normal"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.name}",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					}
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 7,
+				"w": 12,
+				"x": 12,
+				"y": 2
+			},
+			"id": 2,
+			"maxDataPoints": 10000,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id2:regex}$/)\r\n  |> filter(fn: (r) => r._field =~ /^${pollutants:regex}$/)\r\n  |> aggregateWindow(every: 24h, fn: mean)\r\n  ",
+					"refId": "A"
+				}
+			],
+			"title": "Daily Mean (sensor_id [$sensor_id2])",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Last daily average values for selected pollutants for sensor_id1 in the dropdowns.",
+			"fieldConfig": {
+				"defaults": {
+					"displayName": "${__field.name}",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "short"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 4,
+				"w": 12,
+				"x": 0,
+				"y": 9
+			},
+			"id": 3,
+			"options": {
+				"colorMode": "background",
+				"graphMode": "none",
+				"justifyMode": "auto",
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"lastNotNull"
+					],
+					"fields": "",
+					"values": false
+				},
+				"showPercentChange": false,
+				"textMode": "auto",
+				"wideLayout": true
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id1:regex}$/)\r\n  |> filter(fn: (r) => r._field =~ /^${pollutants:regex}$/)\r\n  |> aggregateWindow(every: 24h, fn: mean)\r\n  ",
+					"refId": "A"
+				}
+			],
+			"title": "Averages of last day (sensor_id [$sensor_id1])",
+			"transparent": true,
+			"type": "stat"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Last daily average values for selected pollutants for sensor_id2 in the dropdowns.",
+			"fieldConfig": {
+				"defaults": {
+					"displayName": "${__field.name}",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "short"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 4,
+				"w": 12,
+				"x": 12,
+				"y": 9
+			},
+			"id": 4,
+			"options": {
+				"colorMode": "background",
+				"graphMode": "none",
+				"justifyMode": "auto",
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"lastNotNull"
+					],
+					"fields": "",
+					"values": false
+				},
+				"showPercentChange": false,
+				"textMode": "auto",
+				"wideLayout": true
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id2:regex}$/)\r\n  |> filter(fn: (r) => r._field =~ /^${pollutants:regex}$/)\r\n  |> aggregateWindow(every: 24h, fn: mean)\r\n  ",
+					"refId": "A"
+				}
+			],
+			"title": "Averages of last day (sensor_id [$sensor_id2])",
+			"transparent": true,
+			"type": "stat"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Hourly average values for selected pollutants for sensor_id1 in the dropdowns.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 25,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "linear",
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "normal"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.name}",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					}
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 7,
+				"w": 12,
+				"x": 0,
+				"y": 13
+			},
+			"id": 5,
+			"maxDataPoints": 10000,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id1:regex}$/)\r\n  |> filter(fn: (r) => r._field =~ /^${pollutants:regex}$/)\r\n  |> aggregateWindow(every: 1h, fn: mean)\r\n  ",
+					"refId": "A"
+				}
+			],
+			"title": "Hourly Mean (sensor_id [$sensor_id1])",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Hourly average values for selected pollutants for sensor_id2 in the dropdowns.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 25,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "linear",
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "normal"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.name}",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					}
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 7,
+				"w": 12,
+				"x": 12,
+				"y": 13
+			},
+			"id": 6,
+			"maxDataPoints": 10000,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id2:regex}$/)\r\n  |> filter(fn: (r) => r._field =~ /^${pollutants:regex}$/)\r\n  |> aggregateWindow(every: 1h, fn: mean)\r\n  ",
+					"refId": "A"
+				}
+			],
+			"title": "Hourly Mean (sensor_id [$sensor_id2])",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Temperature Daily Average Comparison between sensor_id [$sensor_id1] and [$sensor_id2]\n",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "thresholds"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "Average Temperature",
+						"axisPlacement": "auto",
+						"fillOpacity": 80,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"lineWidth": 1,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.labels.sensor_id}",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "blue",
+								"value": null
+							},
+							{
+								"color": "super-light-blue",
+								"value": 15
+							},
+							{
+								"color": "light-green",
+								"value": 20
+							},
+							{
+								"color": "super-light-red",
+								"value": 25
+							},
+							{
+								"color": "light-red",
+								"value": 30
+							},
+							{
+								"color": "red",
+								"value": 35
+							}
+						]
+					},
+					"unit": "celsius"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 6,
+				"w": 24,
+				"x": 0,
+				"y": 20
+			},
+			"id": 7,
+			"options": {
+				"barRadius": 0.05,
+				"barWidth": 0.99,
+				"fullHighlight": false,
+				"groupWidth": 0.7,
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"orientation": "vertical",
+				"showValue": "always",
+				"stacking": "none",
+				"text": {
+					"valueSize": 10
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				},
+				"xField": "Time",
+				"xTickLabelRotation": 0,
+				"xTickLabelSpacing": 100
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id1:regex}$/)\r\n  |> filter(fn: (r) => r._field == \"temperature\")\r\n  |> aggregateWindow(every: 1d, fn: mean)",
+					"refId": "sensor_id1"
+				},
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"hide": false,
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id2:regex}$/)\r\n  |> filter(fn: (r) => r._field == \"temperature\")\r\n  |> aggregateWindow(every: 1d, fn: mean)",
+					"refId": "sensor_id2"
+				}
+			],
+			"title": "Temperature Daily Average Comparison ",
+			"transformations": [
+				{
+					"id": "formatTime",
+					"options": {
+						"outputFormat": "",
+						"timeField": "",
+						"useTimezone": true
+					}
+				}
+			],
+			"transparent": true,
+			"type": "barchart"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Humidity Daily Average Comparison between sensor_id [$sensor_id1] and [$sensor_id2]\n",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "Average Humidity",
+						"axisPlacement": "auto",
+						"fillOpacity": 80,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"lineWidth": 1,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.labels.sensor_id}",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "super-light-yellow",
+								"value": null
+							},
+							{
+								"color": "super-light-green",
+								"value": 40
+							},
+							{
+								"color": "light-blue",
+								"value": 60
+							},
+							{
+								"color": "dark-blue",
+								"value": 80
+							}
+						]
+					},
+					"unit": "humidity"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 6,
+				"w": 24,
+				"x": 0,
+				"y": 26
+			},
+			"id": 8,
+			"options": {
+				"barRadius": 0.05,
+				"barWidth": 0.99,
+				"fullHighlight": false,
+				"groupWidth": 0.7,
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"orientation": "vertical",
+				"showValue": "always",
+				"stacking": "none",
+				"text": {
+					"valueSize": 10
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				},
+				"xField": "Time",
+				"xTickLabelRotation": 0,
+				"xTickLabelSpacing": 100
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id1:regex}$/)\r\n  |> filter(fn: (r) => r._field == \"humidity\")\r\n  |> aggregateWindow(every: 1d, fn: mean)",
+					"refId": "sensor_id1"
+				},
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"hide": false,
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id2:regex}$/)\r\n  |> filter(fn: (r) => r._field == \"humidity\")\r\n  |> aggregateWindow(every: 1d, fn: mean)",
+					"refId": "sensor_id2"
+				}
+			],
+			"title": "Humidity Daily Average Comparison ",
+			"transformations": [
+				{
+					"id": "formatTime",
+					"options": {
+						"outputFormat": "",
+						"timeField": "",
+						"useTimezone": true
+					}
+				}
+			],
+			"transparent": true,
+			"type": "barchart"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Total VOCs Daily Average Comparison between sensor_id [$sensor_id1] and [$sensor_id2]\n",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "Average Total Volatile Compounds",
+						"axisPlacement": "auto",
+						"fillOpacity": 80,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"lineWidth": 1,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.labels.sensor_id}",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "super-light-yellow",
+								"value": null
+							},
+							{
+								"color": "super-light-green",
+								"value": 40
+							},
+							{
+								"color": "light-blue",
+								"value": 60
+							},
+							{
+								"color": "dark-blue",
+								"value": 80
+							}
+						]
+					},
+					"unit": "conppb"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 6,
+				"w": 24,
+				"x": 0,
+				"y": 32
+			},
+			"id": 9,
+			"options": {
+				"barRadius": 0.05,
+				"barWidth": 0.99,
+				"fullHighlight": false,
+				"groupWidth": 0.7,
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"orientation": "vertical",
+				"showValue": "always",
+				"stacking": "none",
+				"text": {
+					"valueSize": 10
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				},
+				"xField": "Time",
+				"xTickLabelRotation": 0,
+				"xTickLabelSpacing": 100
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id1:regex}$/)\r\n  |> filter(fn: (r) => r._field == \"tvocs\")\r\n  |> aggregateWindow(every: 1d, fn: mean)",
+					"refId": "sensor_id1"
+				},
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"hide": false,
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id2:regex}$/)\r\n  |> filter(fn: (r) => r._field == \"tvocs\")\r\n  |> aggregateWindow(every: 1d, fn: mean)",
+					"refId": "sensor_id2"
+				}
+			],
+			"title": "Total VOCs Daily Average Comparison ",
+			"transformations": [
+				{
+					"id": "formatTime",
+					"options": {
+						"outputFormat": "",
+						"timeField": "",
+						"useTimezone": true
+					}
+				}
+			],
+			"transparent": true,
+			"type": "barchart"
+		}
+	],
+	"refresh": "",
+	"schemaVersion": 39,
+	"tags": [
+		"at",
+		"de",
+		"es",
+		"nl",
+		"no",
+		"pl"
+	],
+	"templating": {
+		"list": [
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"description": "Pollutants to be compared between 2 sensor devices.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Pollutants",
+				"multi": true,
+				"name": "pollutants",
+				"options": [
+					{
+						"selected": true,
+						"text": "All",
+						"value": "$__all"
+					},
+					{
+						"selected": false,
+						"text": "temperature",
+						"value": "temperature"
+					},
+					{
+						"selected": false,
+						"text": "humidity",
+						"value": "humidity"
+					},
+					{
+						"selected": false,
+						"text": "pm1",
+						"value": "pm1"
+					},
+					{
+						"selected": false,
+						"text": "pm25",
+						"value": "pm25"
+					},
+					{
+						"selected": false,
+						"text": "pm10",
+						"value": "pm10"
+					},
+					{
+						"selected": false,
+						"text": "tvocs",
+						"value": "tvocs"
+					},
+					{
+						"selected": false,
+						"text": "co2",
+						"value": "co2"
+					},
+					{
+						"selected": false,
+						"text": "formaldehyde",
+						"value": "formaldehyde"
+					}
+				],
+				"query": "temperature, humidity, pm1, pm25, pm10, tvocs, co2, formaldehyde",
+				"queryValue": "",
+				"skipUrlSync": false,
+				"type": "custom"
+			},
+			{
+				"current": {
+					"selected": false,
+					"text": "Austria (AT)",
+					"value": "AT"
+				},
+				"description": "Desired pilot where sensor device 1 is searched.",
+				"hide": 0,
+				"includeAll": false,
+				"label": "Pilot 1",
+				"multi": false,
+				"name": "pilot_1",
+				"options": [
+					{
+						"selected": true,
+						"text": "Austria (AT)",
+						"value": "AT"
+					},
+					{
+						"selected": false,
+						"text": "Germany (DE)",
+						"value": "DE"
+					},
+					{
+						"selected": false,
+						"text": "Spain (ES)",
+						"value": "ES"
+					},
+					{
+						"selected": false,
+						"text": "Netherlands (NL)",
+						"value": "NL"
+					},
+					{
+						"selected": false,
+						"text": "Norway (NO)",
+						"value": "NO"
+					},
+					{
+						"selected": false,
+						"text": "Poland (PL)",
+						"value": "PL"
+					}
+				],
+				"query": "Austria (AT) : AT, Germany (DE) : DE, Spain (ES) : ES, Netherlands (NL) : NL, Norway (NO) : NO, Poland (PL) : PL",
+				"queryValue": "",
+				"skipUrlSync": false,
+				"type": "custom"
+			},
+			{
+				"current": {
+					"selected": false,
+					"text": "HOM02",
+					"value": "HOM02"
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\") \r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop) \r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\") \r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_1:regex}$/)\r\n  |> group(columns: [\"sub_scenario\"]) \r\n  |> distinct(column: \"sub_scenario\") \r\n  |> keep(columns: [\"_value\"]) ",
+				"description": "Desired scenario (within a pilot) where sensor device 1 is searched.",
+				"hide": 0,
+				"includeAll": false,
+				"label": "Scenario 1",
+				"multi": false,
+				"name": "scenario_1",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\") \r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop) \r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\") \r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_1:regex}$/)\r\n  |> group(columns: [\"sub_scenario\"]) \r\n  |> distinct(column: \"sub_scenario\") \r\n  |> keep(columns: [\"_value\"]) ",
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": false,
+					"text": "HOM02001",
+					"value": "HOM02001"
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_1:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${scenario_1:regex}$/)\r\n  |> group(columns: [\"area\"])\r\n  |> distinct(column: \"area\")\r\n  |> keep(columns: [\"_value\"])",
+				"description": "Desired area (within a pilot scenario) where sensor device 1 is searched.",
+				"hide": 0,
+				"includeAll": false,
+				"label": "Area 1",
+				"multi": false,
+				"name": "area_1",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_1:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${scenario_1:regex}$/)\r\n  |> group(columns: [\"area\"])\r\n  |> distinct(column: \"area\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": false,
+					"text": "49870",
+					"value": "49870edd785c4fd48cc92fa9f5df200e"
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_1:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${scenario_1:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area_1:regex}$/)\r\n  |> group(columns: [\"sensor_id\"])\r\n  |> distinct(column: \"sensor_id\")\r\n  |> keep(columns: [\"_value\"])",
+				"description": "Sensor device to be compared (Note that the sensor id has been shortened to the initial 5 characters).",
+				"hide": 0,
+				"includeAll": false,
+				"label": "Sensor ID 1",
+				"multi": false,
+				"name": "sensor_id1",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_1:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${scenario_1:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area_1:regex}$/)\r\n  |> group(columns: [\"sensor_id\"])\r\n  |> distinct(column: \"sensor_id\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 1,
+				"regex": "(?<value>(?<text>^.{0,5}).+)",
+				"skipUrlSync": false,
+				"sort": 0,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": false,
+					"text": "Austria (AT)",
+					"value": "AT"
+				},
+				"description": "Desired pilot where sensor device 2 is searched.",
+				"hide": 0,
+				"includeAll": false,
+				"label": "Pilot 2",
+				"multi": false,
+				"name": "pilot_2",
+				"options": [
+					{
+						"selected": true,
+						"text": "Austria (AT)",
+						"value": "AT"
+					},
+					{
+						"selected": false,
+						"text": "Germany (DE)",
+						"value": "DE"
+					},
+					{
+						"selected": false,
+						"text": "Spain (ES)",
+						"value": "ES"
+					},
+					{
+						"selected": false,
+						"text": "Netherlands (NL)",
+						"value": "NL"
+					},
+					{
+						"selected": false,
+						"text": "Norway (NO)",
+						"value": "NO"
+					},
+					{
+						"selected": false,
+						"text": "Poland (PL)",
+						"value": "PL"
+					}
+				],
+				"query": "Austria (AT) : AT, Germany (DE) : DE, Spain (ES) : ES, Netherlands (NL) : NL, Norway (NO) : NO, Poland (PL) : PL",
+				"queryValue": "",
+				"skipUrlSync": false,
+				"type": "custom"
+			},
+			{
+				"current": {
+					"selected": false,
+					"text": "HOM02",
+					"value": "HOM02"
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\") \r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop) \r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\") \r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_2:regex}$/)\r\n  |> group(columns: [\"sub_scenario\"]) \r\n  |> distinct(column: \"sub_scenario\") \r\n  |> keep(columns: [\"_value\"]) ",
+				"description": "Desired scenario (within a pilot) where sensor device 2 is searched.",
+				"hide": 0,
+				"includeAll": false,
+				"label": "Scenario 2",
+				"multi": false,
+				"name": "scenario_2",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\") \r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop) \r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\") \r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_2:regex}$/)\r\n  |> group(columns: [\"sub_scenario\"]) \r\n  |> distinct(column: \"sub_scenario\") \r\n  |> keep(columns: [\"_value\"]) ",
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": false,
+					"text": "HOM02005",
+					"value": "HOM02005"
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_2:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${scenario_2:regex}$/)\r\n  |> group(columns: [\"area\"])\r\n  |> distinct(column: \"area\")\r\n  |> keep(columns: [\"_value\"])",
+				"description": "Desired area (within a pilot scenario) where sensor device 2 is searched.",
+				"hide": 0,
+				"includeAll": false,
+				"label": "Area 2",
+				"multi": false,
+				"name": "area_2",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_2:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${scenario_2:regex}$/)\r\n  |> group(columns: [\"area\"])\r\n  |> distinct(column: \"area\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": false,
+					"text": "e30ea",
+					"value": "e30ea4d0fb64401bb59fc5275fd1143f"
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_2:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${scenario_2:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area_2:regex}$/)\r\n  |> group(columns: [\"sensor_id\"])\r\n  |> distinct(column: \"sensor_id\")\r\n  |> keep(columns: [\"_value\"])",
+				"description": "Sensor device to be compared (Note that the sensor id has been shortened to the initial 5 characters).",
+				"hide": 0,
+				"includeAll": false,
+				"label": "Sensor ID 2",
+				"multi": false,
+				"name": "sensor_id2",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot_2:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${scenario_2:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area_2:regex}$/)\r\n  |> group(columns: [\"sensor_id\"])\r\n  |> distinct(column: \"sensor_id\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 1,
+				"regex": "(?<value>(?<text>^.{0,5}).+)",
+				"skipUrlSync": false,
+				"sort": 0,
+				"type": "query"
+			}
+		]
+	},
+	"time": {
+		"from": "now-6h",
+		"to": "now"
+	},
+	"timepicker": {
+		"hidden": false,
+		"refresh_intervals": []
+	},
+	"timezone": "",
+	"title": "6. Sensor device comparison",
+	"uid": "sensor-device-comparison",
+	"version": 1,
+	"weekStart": ""
+}

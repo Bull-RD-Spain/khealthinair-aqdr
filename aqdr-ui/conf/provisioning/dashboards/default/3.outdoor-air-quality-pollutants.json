@@ -1,0 +1,1034 @@
+{
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": {
+					"type": "grafana",
+					"uid": "-- Grafana --"
+				},
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"type": "dashboard"
+			}
+		]
+	},
+	"description": "This dashboard summarizes the outdoor pollutants measurements with panels per each of them, under the series of temperature and humidity as reference.",
+	"editable": true,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"links": [],
+	"liveNow": false,
+	"panels": [
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"gridPos": {
+				"h": 2,
+				"w": 24,
+				"x": 0,
+				"y": 0
+			},
+			"id": 8,
+			"options": {
+				"code": {
+					"language": "plaintext",
+					"showLineNumbers": false,
+					"showMiniMap": false
+				},
+				"content": "<style>\n  @font-face {font-family: 'Quicksand';src: url(\"public/fonts/Quicksand.woff2\") format('woff2')}\n</style>\n<div style=\"color:#548343; font-weight:bold; background-color:#b8bb62; font-size:larger;\">\n  &nbsp;Outdoor Air Quality Pollutants\n</div>\n<div style=\"color:#548343; font-weight:normal;\">\n  This dashboard summarizes the outdoor pollutants measurements with panels per each of them, under the series of temperature and humidity as reference. Since each panel contains a single type of measurement, units could be displayed and the filter precision do not reach the pollutant selector due to the type of visualization, already segregated, maintaining Pilot, Scenario, SubScenario, Area and specific Sensor ID, like in the other general dashboards.<br/>\n  <span style=\"color:#fbcb09;\">More info about manipulating pannels in the <a href=\"/d/home/\">Home screen</a></span>\n</div>",
+				"mode": "html"
+			},
+			"pluginVersion": "10.4.3",
+			"transparent": true,
+			"type": "text"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Dashboard for outdoor Temperature. Filtering by pilot, scenario, sub_scenario, area and specific sensor device is possible.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "continuous-BlYlRd",
+						"seriesBy": "min"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 2,
+						"gradientMode": "scheme",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 2,
+						"pointSize": 2,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "always",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.labels.id_pilot}${__field.labels.area} [${__field.labels.sensor_id}]",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "celsius"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 6,
+				"w": 12,
+				"x": 0,
+				"y": 2
+			},
+			"id": 1,
+			"maxDataPoints": 2500,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "table",
+					"placement": "bottom",
+					"showLegend": false
+				},
+				"tooltip": {
+					"mode": "multi",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r._field == \"out_temperature\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id:regex}$/)",
+					"refId": "A"
+				}
+			],
+			"title": "Pollutant: Temperature",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Dashboard for outdoor Humidity. Filtering by pilot, scenario, sub_scenario, area and specific sensor device is possible.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "continuous-BlPu",
+						"seriesBy": "min"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 2,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 1,
+						"pointSize": 0,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.labels.id_pilot}${__field.labels.area} [${__field.labels.sensor_id}]",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "humidity"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 6,
+				"w": 12,
+				"x": 12,
+				"y": 2
+			},
+			"id": 2,
+			"maxDataPoints": 2500,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": false
+				},
+				"tooltip": {
+					"mode": "multi",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r._field == \"out_humidity\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id:regex}$/)",
+					"refId": "A"
+				}
+			],
+			"title": "Pollutant: Humidity",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Dashboard for outdoor CO (carbon monoxide). Filtering by pilot, scenario, sub_scenario, area and specific sensor device is possible.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "continuous-BlPu",
+						"seriesBy": "min"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 4,
+						"gradientMode": "opacity",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 1,
+						"pointSize": 0,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.labels.id_pilot}${__field.labels.area} [${__field.labels.sensor_id}]",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "conppb"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 7,
+				"w": 12,
+				"x": 0,
+				"y": 8
+			},
+			"id": 3,
+			"maxDataPoints": 2500,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": false
+				},
+				"tooltip": {
+					"mode": "multi",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r._field == \"out_co\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id:regex}$/)",
+					"refId": "A"
+				}
+			],
+			"title": "Pollutant: CO",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Dashboard for outdoor O3 (ozone). Filtering by pilot, scenario, sub_scenario, area and specific sensor device is possible.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic",
+						"seriesBy": "min"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 2,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 1,
+						"pointSize": 0,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.labels.id_pilot}${__field.labels.area} [${__field.labels.sensor_id}]",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "#50f0e6",
+								"value": null
+							},
+							{
+								"color": "#50ccaa",
+								"value": 25
+							},
+							{
+								"color": "#f0e641",
+								"value": 50
+							},
+							{
+								"color": "#ff5050",
+								"value": 60
+							},
+							{
+								"color": "#960032",
+								"value": 120
+							},
+							{
+								"color": "#7d2181",
+								"value": 200
+							}
+						]
+					},
+					"unit": "ppb"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 7,
+				"w": 12,
+				"x": 12,
+				"y": 8
+			},
+			"id": 4,
+			"maxDataPoints": 2500,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": false
+				},
+				"tooltip": {
+					"mode": "multi",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r._field == \"out_o3\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id:regex}$/)",
+					"refId": "A"
+				}
+			],
+			"title": "Pollutant: O3",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Dashboard for outdoor SO2 (sulfur dioxide). Filtering by pilot, scenario, sub_scenario, area and specific sensor device is possible.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic",
+						"seriesBy": "min"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 0,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.labels.id_pilot}${__field.labels.area} [${__field.labels.sensor_id}]",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "conppb"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 7,
+				"w": 12,
+				"x": 0,
+				"y": 15
+			},
+			"id": 5,
+			"maxDataPoints": 2500,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": false
+				},
+				"tooltip": {
+					"mode": "multi",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r._field == \"out_so2\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id:regex}$/)",
+					"refId": "A"
+				}
+			],
+			"title": "Pollutant: SO2",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Dashboard for outdoor NO2 (nitrogen dioxide). Filtering by pilot, scenario, sub_scenario, area and specific sensor device is possible.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic",
+						"seriesBy": "min"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 12,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.labels.id_pilot}${__field.labels.area} [${__field.labels.sensor_id}]",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "conppb"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 7,
+				"w": 12,
+				"x": 12,
+				"y": 15
+			},
+			"id": 6,
+			"maxDataPoints": 2500,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": false
+				},
+				"tooltip": {
+					"mode": "multi",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r._field == \"out_no2\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id:regex}$/)",
+					"refId": "A"
+				}
+			],
+			"title": "Pollutant: NO2",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "Dashboard for outdoor Particulates Matter (PM2.5, PM10). Filtering by pilot, scenario, sub_scenario, area and specific sensor device is possible. PM(2.5, 10) mean PMs whose diameter is equal or smaller than (2.5, 10) micrometres, respectively.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic",
+						"seriesBy": "min"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisGridShow": true,
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 4,
+						"gradientMode": "opacity",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "dashed+area"
+						}
+					},
+					"displayName": "${__field.labels.id_pilot}${__field.labels.area} [${__field.labels.sensor_id}]",
+					"mappings": [
+						{
+							"options": {
+								"pm1": {
+									"color": "dark-red",
+									"index": 0
+								}
+							},
+							"type": "value"
+						}
+					],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "#EAB839",
+								"value": 480
+							},
+							{
+								"color": "red",
+								"value": 500
+							}
+						]
+					},
+					"unit": "µg/m³"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 6,
+				"w": 24,
+				"x": 0,
+				"y": 22
+			},
+			"id": 7,
+			"maxDataPoints": 2500,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": false
+				},
+				"tooltip": {
+					"mode": "multi",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r._field == \"out_pm10\" or r._field == \"out_pm25\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id:regex}$/)",
+					"refId": "A"
+				}
+			],
+			"title": "Pollutant: Particles Matter (PM2.5, PM10)",
+			"transparent": true,
+			"type": "timeseries"
+		}
+	],
+	"refresh": "",
+	"schemaVersion": 39,
+	"tags": [
+		"at",
+		"de",
+		"es",
+		"nl",
+		"no",
+		"pl"
+	],
+	"templating": {
+		"list": [
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"description": "Allows filtering air quality data by pilot locations.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Pilot",
+				"multi": true,
+				"name": "pilot",
+				"options": [
+					{
+						"selected": true,
+						"text": "All",
+						"value": "$__all"
+					},
+					{
+						"selected": false,
+						"text": "Austria (AT)",
+						"value": "AT"
+					},
+					{
+						"selected": false,
+						"text": "Germany (DE)",
+						"value": "DE"
+					},
+					{
+						"selected": false,
+						"text": "Spain (ES)",
+						"value": "ES"
+					},
+					{
+						"selected": false,
+						"text": "Netherlands (NL)",
+						"value": "NL"
+					},
+					{
+						"selected": false,
+						"text": "Norway (NO)",
+						"value": "NO"
+					},
+					{
+						"selected": false,
+						"text": "Poland (PL)",
+						"value": "PL"
+					}
+				],
+				"query": "Austria (AT) : AT, Germany (DE) : DE, Spain (ES) : ES, Netherlands (NL) : NL, Norway (NO) : NO, Poland (PL) : PL",
+				"queryValue": "",
+				"skipUrlSync": false,
+				"type": "custom"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"description": "Allows filtering air quality data by type of scenario locations.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Scenario",
+				"multi": true,
+				"name": "scenario",
+				"options": [
+					{
+						"selected": true,
+						"text": "All",
+						"value": "$__all"
+					},
+					{
+						"selected": false,
+						"text": "Canteens (CAN)",
+						"value": "CAN"
+					},
+					{
+						"selected": false,
+						"text": "Lecture Halls (LEC)",
+						"value": "LEC"
+					},
+					{
+						"selected": false,
+						"text": "Residence Homes (RES)",
+						"value": "RES"
+					},
+					{
+						"selected": false,
+						"text": "Retirement Homes (RET)",
+						"value": "RET"
+					},
+					{
+						"selected": false,
+						"text": "Schools (SCH)",
+						"value": "SCH"
+					},
+					{
+						"selected": false,
+						"text": "Homes (HOM)",
+						"value": "HOM"
+					},
+					{
+						"selected": false,
+						"text": "Hospitals (HOS)",
+						"value": "HOS"
+					},
+					{
+						"selected": false,
+						"text": "Markets (MKT)",
+						"value": "MKT"
+					},
+					{
+						"selected": false,
+						"text": "Metro Stations (MET)",
+						"value": "MET"
+					}
+				],
+				"query": "Canteens (CAN) : CAN, Lecture Halls (LEC) : LEC, Residence Homes (RES) : RES, Retirement Homes (RET) : RET, Schools (SCH) : SCH, Homes (HOM) : HOM, Hospitals (HOS) : HOS, Markets (MKT) : MKT, Metro Stations (MET) : MET",
+				"queryValue": "",
+				"skipUrlSync": false,
+				"type": "custom"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> group(columns: [\"sub_scenario\"])\r\n  |> distinct(column: \"sub_scenario\")\r\n  |> keep(columns: [\"_value\"])",
+				"description": "Allows filtering air quality data according to specific scenario location.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "SubScenario",
+				"multi": true,
+				"name": "sub_scenario",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> group(columns: [\"sub_scenario\"])\r\n  |> distinct(column: \"sub_scenario\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 2,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> group(columns: [\"area\"])\r\n  |> distinct(column: \"area\")\r\n  |> keep(columns: [\"_value\"])",
+				"description": "Allows filtering air quality data according to specific area location.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Area",
+				"multi": true,
+				"name": "area",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> group(columns: [\"area\"])\r\n  |> distinct(column: \"area\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 2,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) =>  r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) =>  r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) =>  r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) =>  r.area =~ /^${area:regex}$/)\r\n  |> group(columns: [\"sensor_id\"])\r\n  |> distinct(column: \"sensor_id\")\r\n  |> keep(columns: [\"_value\"])",
+				"description": "Allows filtering air quality data according to specific sensor device (Note that the sensor id has been shortened to the initial 5 characters).",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Sensor ID",
+				"multi": true,
+				"name": "sensor_id",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) =>  r.id_pilot =~ /^${pilot:regex}$/)\r\n  |> filter(fn: (r) =>  r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) =>  r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) =>  r.area =~ /^${area:regex}$/)\r\n  |> group(columns: [\"sensor_id\"])\r\n  |> distinct(column: \"sensor_id\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 2,
+				"regex": "(?<value>(?<text>^.{0,5}).+)",
+				"skipUrlSync": false,
+				"sort": 0,
+				"type": "query"
+			}
+		]
+	},
+	"time": {
+		"from": "now-6h",
+		"to": "now"
+	},
+	"timepicker": {
+		"hidden": false,
+		"refresh_intervals": []
+	},
+	"timezone": "",
+	"title": "3. Outdoor Air Quality Pollutants",
+	"uid": "outdoor-air-quality-pollutants",
+	"version": 1,
+	"weekStart": ""
+}

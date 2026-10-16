@@ -1,0 +1,231 @@
+# Copyright © 2021-2026 Bull SAS
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# This file is part of work done in the K-HEALTHinAIR EU funded project.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Avoid env_file since other services do not need to know every variable
+# podman compose --env-file ./khealthinair-aqdr.env up -d
+services:
+  ####### aqdr-platform-db #######
+  aqdr-platform-db:
+    container_name: 'aqdr-platform-db'
+    image: postgres:16.4
+    ports:
+      - 8082:5432 # Hide for prod
+    volumes:
+      - ./..:/workspace:cached
+      - aqdr-platform-db-data:/var/lib/postgresql/data
+      - type: bind
+        source: ../../aqdr-platform-db/00-aqdr-platform-db-init.sh
+        target: /docker-entrypoint-initdb.d/00-aqdr-platform-db-init.sh
+        read_only: true
+      - type: bind
+        source: ../../aqdr-platform-db/01-aqdr-platform-db-init.sql
+        target: /docker-entrypoint-initdb.d/01-aqdr-platform-db-init.sql
+        read_only: true
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} --quiet" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 5s
+    command: postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - SENSORS_DB_PASSWORD=${SENSORS_DB_PASSWORD}
+    restart: 'always'
+
+  ####### aqdr-platform-db-ui #######
+  aqdr-platform-db-ui:
+    container_name: 'aqdr-platform-db-ui'
+    image: michalhosna/adminer:4.8.1-en_v1
+    ports:
+      - 8084:8080
+    environment:
+      - ADMINER_DRIVER=pgsql
+      - ADMINER_SERVER=${ADMINER_SERVER}
+      - ADMINER_USERNAME=${ADMINER_USERNAME}
+      - ADMINER_PASSWORD=${ADMINER_PASSWORD}
+      - ADMINER_DB=${ADMINER_DB}
+      - ADMINER_AUTOLOGIN=0
+      - ADMINER_NAME=<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAx5JREFUOE91k91rW2Ucxz9P2nPy3pc0SU2bJp12XV3XuuGFF5uIuhUmol527FIQHV54sylO8EKmu1LxSi9EwT+gimyDMWGCFksGau3WrXZLRtOmiWlyTl7OSXJeHmkmww393f3g+X54fvD5Cv5jXKctbWMNy8zRbqzRNvN4vClC0ecJDsyKf0ceWJx2SdbzX2A1V5FCwbZqyJ4BUOIY9TV6/XtxpIfU1BlUb6SbvQ+w9UXZzH+GqS11H9lSwRUBfJGj6DtLOKhdUHzsBOXiTzw2/Taqd1B0AW5zRdo736KXLtJpbeNIBTVyFCX8JEbtBt7wLEYjS6W0yMjEKfJ3F/CFJjlw8N17ACt3RnaUKfTsBzjCjzrwLJbdpmVskdz7JmZ9nVL1Dop/nNL2j/jDj1Nvlph54h2Eo1+VuBbV/FeYeobByU9o1W9S2Vro3p+aPo/R+JO7698QSbxAaGCW68sfY8sextIvI+z8h7Jn5DSFzDN0OhXCyVNoxQv0Jeapa8s06zkC/YfwhvZR2LxMdPg5srnvGYofwXFdhL1xTvaOnRX5Xw7LjqXTN/o6tcoi/sEjlPLfEU3Oo2k30LRbeJQo8cQx7mQvkEwdxzDKCGvjnFTGzoqt307KZu06/cnXKG8u0PfIS3TaVRRfiu3CDwwnX6FHGcQw/+J29hKp1BxIEFb+I9k7cppq/mtK2c8Z2vMWDX0VvfIrang/wb4ZDGObWqPIUOwpHCnIZi+RTs8Ri84inOpliceP9M+wnplHqMP0x4+j7WSoajdJpE7QbBa6gGB4gkLxGh6Pyv6pk4yOHhZCura0N95DSZ8XevlnmV15H1t6CA89TSA8xS58c/MqZrtJ22p13RtPz/HonhdR1dA/ItUz0m1cozfxhtDKS/L26qe0Ok2kCBDsn6ZcudWVazfs90WZOfAqkci+h1SuLUmPfwLhCWK7NsWtK5TLyzSMCq5QCQZHcZwO8dhBxtPH7lfgwTJVLkpXHeP3tSvdL4YCMUxzB62WwzTLxGOHiEQm/7+Nu1o7jiX/WPmye6cHm7bVIBQex++7176H52+SRHCPJxwvawAAAABJRU5ErkJggg=="/>&nbsp;K-HEALTHinAIR Platform AQDR DB
+    restart: "always"
+    depends_on:
+      aqdr-platform-db:
+        condition: service_healthy
+
+  ####### aqdr-ts-db #######
+  aqdr-ts-db:
+    container_name: 'aqdr-ts-db'
+    image: influxdb:2.7.8
+    volumes:
+      - ./..:/workspace:cached
+      - aqdr-ts-db-data:/var/lib/influxdb2
+      - type: bind
+        source: ../../.devcontainer/aqdr-ts-db/aqdr-ts-db-init.sh
+        target: /docker-entrypoint-initdb.d/aqdr-ts-db-init.sh
+        read_only: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/ping"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 30s
+    ports:
+      - 8086:8086
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${DOCKER_INFLUXDB_INIT_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}
+      - INFLUX_EXTRA_BUCKETS=${INFLUX_EXTRA_BUCKETS}
+    restart: 'always'
+    #depends_on:
+    #  aqdr-platform-db:
+    #    condition: service_healthy
+
+  ###### aqdr-api #######
+  aqdr-api:
+    container_name: 'aqdr-api'
+    image: ${REGISTRY_HOST}/arihealth/khealthinair/aqdr-api:latest
+    volumes:
+      - ./..:/workspace:cached
+      # API users (bcrypt hashes), create from aqdr-api-users.example.json
+      - ../../aqdr-api/config/aqdr-api-users.json:/app/config/aqdr-api-users.json:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/health/ready"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 30s
+    ports:
+      - 8083:8083
+      - "5678:5678"  # Expose the debugger port
+    environment:
+      - APP_LOG_LEVEL=${APP_LOG_LEVEL}
+      - INFLUXDB_URL=${INFLUXDB_URL}
+      - INFLUXDB_MEASUREMENT=${INFLUXDB_MEASUREMENT}
+      - SENSORS_DB_HOST=${SENSORS_DB_HOST}
+      - SENSORS_DB_PORT=${SENSORS_DB_PORT}
+      - SENSORS_DB_TABLE=${SENSORS_DB_TABLE}
+      - SENSORS_DB_NAME=${SENSORS_DB_NAME}
+      - SENSORS_DB_USER=${SENSORS_DB_USER}
+      - SENSORS_DB_PASSWORD=${SENSORS_DB_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
+      - AQDR_API_CONTEXTPATH=${AQDR_API_CONTEXTPATH}
+      - AQDR_API_AUTH_SECRET_KEY=${AQDR_API_AUTH_SECRET_KEY}
+      - INBIOT_API_URL=${INBIOT_API_URL}
+      - QLAIR_API_URL=${QLAIR_API_URL}
+      - KUNAK_API_URL=${KUNAK_API_URL}
+    restart: 'always'
+    depends_on:
+      aqdr-platform-db:
+        condition: service_healthy
+      aqdr-ts-db:
+        condition: service_healthy
+
+  ###### aqdr-ingestor #######
+  aqdr-ingestor:
+    profiles:
+     - donotstart # Do not add extra requests during dev if not needed
+    container_name: 'aqdr-ingestor'
+    image: ${REGISTRY_HOST}/arihealth/khealthinair/aqdr-ingestor:latest
+    volumes:
+      - ./..:/workspace:cached
+    environment:
+      - APP_LOG_LEVEL=${APP_LOG_LEVEL}
+      - INBIOT_API_URL=${INBIOT_API_URL}
+      - QLAIR_API_URL=${QLAIR_API_URL}
+      - KUNAK_API_URL=${KUNAK_API_URL}
+      - KUNAK_API_BASIC_AUTH=${KUNAK_API_BASIC_AUTH}
+      - KUNAK_API_DEVICE=${KUNAK_API_DEVICE}
+      - IND_INBIOT_PERIODICITY=${IND_INBIOT_PERIODICITY}
+      - IND_QLAIR_PERIODICITY=${IND_QLAIR_PERIODICITY}
+      - OUTDOOR_PERIODICITY=${OUTDOOR_PERIODICITY}
+      - INBIOT_API_URL_REQUEST_LIMIT=${INBIOT_API_URL_REQUEST_LIMIT}
+      - AQDR_API_CONTEXTPATH=${AQDR_API_CONTEXTPATH}
+      - AQDR_API_AUTH_SECRET_KEY=${AQDR_API_AUTH_SECRET_KEY}
+      - SENSORS_DB_NAME=${SENSORS_DB_NAME}
+      - SENSORS_DB_USER=${SENSORS_DB_USER}
+      - SENSORS_DB_PASSWORD=${SENSORS_DB_PASSWORD}
+      - SENSORS_DB_HOST=${SENSORS_DB_HOST}
+      - SENSORS_DB_PORT=${SENSORS_DB_PORT}
+      - SENSORS_DB_TABLE=${SENSORS_DB_TABLE}
+      - INFLUXDB_URL=${INFLUXDB_URL}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
+      - DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}
+      - INFLUXDB_MEASUREMENT=${INFLUXDB_MEASUREMENT}
+    restart: 'on-failure:5' # 'unless-stopped'
+    depends_on:
+      aqdr-platform-db:
+        condition: service_healthy
+      aqdr-ts-db:
+        condition: service_healthy
+      aqdr-api:
+        condition: service_started
+
+  ###### aqdr-ui #######
+  aqdr-ui:
+    container_name: 'aqdr-ui'
+    image: ${REGISTRY_HOST}/arihealth/khealthinair/aqdr-ui:latest
+    volumes:
+      - ./..:/workspace:cached
+      - aqdr-ui-data:/var/lib/grafana
+      - type: bind
+        source: ../../.devcontainer/aqdr-ui/aqdr-ui-init-conf.yaml
+        target: /aqdr-ui/grafana-initialization/aqdr-ui-init-conf.yaml
+        read_only: true
+    ports:
+      - 3000:3000
+    environment:
+      - APP_LOG_LEVEL=${APP_LOG_LEVEL}
+      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
+      - KHIA_DSOURCE_URL=${KHIA_DSOURCE_URL}
+      - KHIA_DSOURCE_AUTH_USER=${KHIA_DSOURCE_AUTH_USER}
+      - KHIA_DSOURCE_AUTH_PASSWORD=${KHIA_DSOURCE_AUTH_PASSWORD}
+      - KHIA_DSOURCE_AUTH_TOKEN=${KHIA_DSOURCE_AUTH_TOKEN}
+      - GRAFANA_INGRESS_URL=${GRAFANA_INGRESS_URL}
+      - GRAFANA_API_ENDPOINT=${GRAFANA_API_ENDPOINT}
+      - GF_SNAPSHOTS_EXTERNAL_SNAPSHOT_NAME="Generate snapshot in "${GRAFANA_INGRESS_URL}
+      - GF_SNAPSHOTS_EXTERNAL_SNAPSHOT_URL=${GRAFANA_INGRESS_URL}
+      - GF_SMTP_ENABLED=${GF_SMTP_ENABLED}
+      - GF_SMTP_HOST=${GF_SMTP_HOST}
+      - GF_SMTP_USER=${GF_SMTP_USER}
+      - GF_SMTP_PASSWORD=${GF_SMTP_PASSWORD}
+      - GF_SMTP_SKIP_VERIFY=${GF_SMTP_SKIP_VERIFY}
+      - GF_SMTP_FROM_ADDRESS=${GF_SMTP_FROM_ADDRESS}
+      - GF_SMTP_FROM_NAME="K-HEALTHinAIR Platform AQDR"
+    restart: "always"
+    depends_on:
+      aqdr-platform-db:
+        condition: service_healthy
+      aqdr-ts-db:
+        condition: service_healthy
+      aqdr-api:
+        condition: service_healthy
+
+volumes:
+  aqdr-platform-db-data:
+  aqdr-ts-db-data:
+  aqdr-ui-data:

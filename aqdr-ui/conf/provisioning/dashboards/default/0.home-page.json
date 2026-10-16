@@ -1,0 +1,282 @@
+{
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": {
+					"type": "grafana",
+					"uid": "-- Grafana --"
+				},
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"target": {
+					"limit": 100,
+					"matchAny": false,
+					"tags": [],
+					"type": "dashboard"
+				},
+				"type": "dashboard"
+			}
+		]
+	},
+	"description": "Home Page for the K-HEALTHinAIR Platform.",
+	"editable": true,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"id": 1,
+	"links": [],
+	"panels": [
+		{
+			"description": "K-HEALTHinAIR Platform AQDR (Air Quality Data Repository) Home page",
+			"fieldConfig": {
+				"defaults": {},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 28,
+				"w": 16,
+				"x": 0,
+				"y": 0
+			},
+			"id": 2,
+			"options": {
+				"code": {
+					"language": "plaintext",
+					"showLineNumbers": false,
+					"showMiniMap": false
+				},
+				"content": "<style>\n  @font-face{font-family:Quicksand;src:url(public/fonts/Quicksand.woff2) format('woff2')}\n  // [data-logged=\"\"]{display:none}\n</style>\n<div style=\"font-family:Quicksand,sans-serif;font-weight:400;font-size:.9em\">\n  <p style=\"text-align:center;margin-left:auto;margin-right:auto\">\n    <a href='https://k-healthinair.eu' title='K-HEALTHinAIR Project Website' target=\"_blank\"><img src=\"public/img/K-HEALTHinAIR_original@3x.png\" alt=\"K-HEALTHinAIR\" height=\"100\"></a>\n    <a href='https://cordis.europa.eu/project/id/101057693' title='CORDIS - EU research results' target=\"_blank\"><img src=\"public/img/EUFunded.png\" alt=\"K-HEALTHinAIR\" height=\"50\"></a><br/>\n    <span style=\"font-weight:700;font-stretch:extra-expanded\">Knowledge for improving indoor air quality and health.</span> <span>AQDR (Air Quality Data Repository)</span>\n  </p>\n  <span data-logged=\"${__user.login}\" style=\"font-family:Quicksand,sans-serif\">\n    <table style=\"border:none;width:95%;font-family:Quicksand,sans-serif;\">\n      <tr>\n        <td style=\"border:none; vertical-align:top;\">\n          <h4 style=\"border:none;padding-bottom:0;border-bottom:4px dotted #3c7228;font-size:1.2em;font-weight:700;color:#3c7228\">\n            Main dashboards\n          </h4>\n          <ol start=\"1\" style=\"font-size:1.1em;font-weight:700\">\n            <li><a href=\"d/continuous-monitoring-air-quality/1-continuous-monitoring3a-air-quality-overview\">Continuous Monitoring: Air Quality Overview</a></li>\n            <li><a href=\"d/indoor-air-quality-pollutants/2-indoor-air-quality-pollutants\">Indoor Air Quality Pollutants</a></li>\n            <li><a href=\"d/outdoor-air-quality-pollutants/3-outdoor-air-quality-pollutants\">Outdoor Air Quality Pollutants</a></li>\n            <li><a href=\"d/indoor-vs-outdoor-pollutants/4-indoor-vs-outdoor-pollutants\">Indoor vs Outdoor Pollutants</a></li>\n            <li><a href=\"d/indoor-air-quality-per-scenario-type/5-indoor-air-quality-per-scenario-type\">Indoor Air Quality per Scenario type</a></li>\n            <li><a href=\"d/sensor-device-comparison/6-sensor-device-comparison\">Compare a specific sensor device with another sensor device</a></li>\n          </ol>\n        </td>\n        <td style=\"border:none; vertical-align:top;\">\n          <table style=\"border:none;font-weight:700;text-align:center;margin-left:auto;margin-right:auto;>\n      <tr>\n        <td colspan=\"6\" style=\"border:none;padding-bottom:8px;\">\n          <h4 style=\"border:none;padding-bottom:0;border-bottom:4px dotted #3c7228;font-size:1.2em;font-weight:700;color:#3c7228\">\n            Pilots\n          </h4>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"border:none;min-width:100px;\"><a href=\"dashboards/f/pilot-at\"><img src=\"public/img/flag_at.svg\" alt=\"FlagAT\" height=\"20\"><br>Austria<br><img src=\"public/img/PilotAT.png\" alt=\"PilotAT\" height=\"150\"></a></td>\n        <td style=\"border:none;min-width:100px;\"><a href=\"dashboards/f/pilot-de\"><img src=\"public/img/flag_de.svg\" alt=\"FlagDE\" height=\"20\"><br>Germany<br><img src=\"public/img/PilotDE.png\" alt=\"PilotDE\" height=\"150\"></a></td>\n        <td style=\"border:none;min-width:100px;\"><a href=\"dashboards/f/pilot-nl\"><img src=\"public/img/flag_nl.svg\" alt=\"FlagNL\" height=\"20\"><br>Netherlands<br><img src=\"public/img/PilotNL.png\" alt=\"PilotNL\" height=\"150\"></a></td>\n        <td style=\"border:none;min-width:100px;\"><a href=\"dashboards/f/pilot-no\"><img src=\"public/img/flag_no.svg\" alt=\"FlagNO\" height=\"20\"><br>Norway<br><img src=\"public/img/PilotNO.png\" alt=\"PilotNO\" height=\"150\"></a></td>\n        <td style=\"border:none;min-width:100px;\"><a href=\"dashboards/f/pilot-pl\"><img src=\"public/img/flag_pl.svg\" alt=\"FlagPL\" height=\"20\"><br>Poland<br><img src=\"public/img/PilotPL.png\" alt=\"PilotPL\" height=\"150\"></a></td>\n        <td style=\"border:none;min-width:100px;\"><a href=\"dashboards/f/pilot-es\"><img src=\"public/img/flag_es.svg\" alt=\"FlagES\" height=\"20\"><br>Spain<br><img src=\"public/img/PilotES.png\" alt=\"PilotES\" height=\"150\"></a></td>\n      </tr>\n    </table>\n    </td>\n    </tr>\n    </table>\n    <table style=\"border:none;width:95%;font-family:Quicksand,sans-serif;\">\n      <tr>\n        <td style=\"border:none; vertical-align:top;width:50%\">\n          <h4 style=\"border:none;padding-bottom:0;border-bottom:4px dotted #3c7228;font-size:1.2em;font-weight:700;color:#3c7228\">\n            Sensors Code convention\n          </h4>\n          <table style=\"margin:0 auto;background-image:linear-gradient(rgba(255,255,255,.5),rgba(255,255,255,.5)),url(public/img/Header_Home_si.png)\">\n            <thead>\n              <tr style=\"font-size:1em\">\n                <th style=\"text-align:center;font-weight:700\" colspan=\"2\">Pilot Code</th>\n                <th style=\"text-align:center;font-weight:700\" colspan=\"3\">Scenario Code</th>\n                <th style=\"text-align:center;font-weight:700\">Area Code</th>\n              </tr>\n              <tr>\n                <td style=\"text-align:center;font-weight:700;font-size:.8em\" colspan=\"2\"></td>\n                <td style=\"text-align:center;font-weight:700;font-size:.8em\" colspan=\"3\">Type + ## = SubScenario</td>\n                <td style=\"text-align:center;font-weight:700;font-size:.8em\">###</td>\n              </tr>\n            </thead>\n            <tbody>\n              <tr>\n                <td style=\"font-weight:700\"><img src=\"public/img/flag_at.svg\" alt=\"FlagAT\" height=\"10\">&nbsp;&nbsp;AT</td>\n                <td style=\"text-align:left\">Austria</td>\n                <td style=\"font-weight:700\">CAN</td>\n                <td style=\"text-align:left\">Canteen</td>\n                <td rowspan=\"9\" style=\"text-align:center;vertical-align:middle;font-weight:700\">01-99</td>\n                <td rowspan=\"9\" style=\"text-align:center;vertical-align:middle;font-weight:700\">001-999</td>\n              </tr>\n              <tr>\n                <td style=\"font-weight:700\"><img src=\"public/img/flag_de.svg\" alt=\"FlagDE\" height=\"10\">&nbsp;&nbsp;DE</td>\n                <td style=\"text-align:left\">Germany</td>\n                <td style=\"font-weight:700\">LEC</td>\n                <td style=\"text-align:left\">Lecture Hall</td>\n              </tr>\n              <tr>\n                <td style=\"font-weight:700\"><img src=\"public/img/flag_es.svg\" alt=\"FlagES\" height=\"10\">&nbsp;&nbsp;ES</td>\n                <td style=\"text-align:left\">Spain</td>\n                <td style=\"font-weight:700\">HOM</td>\n                <td style=\"text-align:left\">Home</td>\n              </tr>\n              <tr>\n                <td style=\"font-weight:700\"><img src=\"public/img/flag_nl.svg\" alt=\"FlagNL\" height=\"10\">&nbsp;&nbsp;NL</td>\n                <td style=\"text-align:left\">Netherlands</td>\n                <td style=\"font-weight:700\">HOS</td>\n                <td style=\"text-align:left\">Hospital</td>\n              </tr>\n              <tr>\n                <td style=\"font-weight:700\"><img src=\"public/img/flag_no.svg\" alt=\"FlagNO\" height=\"10\">&nbsp;&nbsp;NO</td>\n                <td style=\"text-align:left\">Norway</td>\n                <td style=\"font-weight:700\">MET</td>\n                <td style=\"text-align:left\">Metro Station</td>\n              </tr>\n              <tr>\n                <td style=\"font-weight:700;vertical-align:top\"><img src=\"public/img/flag_pl.svg\" alt=\"FlagPL\" height=\"10\">&nbsp;&nbsp;PL</td>\n                <td style=\"text-align:left;vertical-align:top\">Poland</td>\n                <td style=\"font-weight:700\">MKT</td>\n                <td style=\"text-align:left\">Market</td>\n              </tr>\n              <tr>\n                <td rowspan=\"3\"></td>\n                <td rowspan=\"3\"></td>\n                <td style=\"font-weight:700\">RES</td>\n                <td style=\"text-align:left\">Residence Home</td>\n              </tr>\n              <tr>\n                <td style=\"font-weight:700\">RET</td>\n                <td style=\"text-align:left\">Retirement Home</td>\n              </tr>\n              <tr>\n                <td style=\"font-weight:700\">SCH</td>\n                <td style=\"text-align:left\">School</td>\n              </tr>\n            </tbody>\n          </table>\n          <br>\n          <h4 style=\"border:none;padding-bottom:0;border-bottom:4px dotted #3c7228;font-size:1.2em;font-weight:700;color:#3c7228\">\n            Legends\n          </h4>\n          <div style=\"white-space:nowrap;\">\n            In general terms, from favorable to unfavorable colors:\n            <span style=\"font-size:20px;color:#50f0e6;\">&#9724;</span>\n            <span style=\"font-size:20px;color:#50ccaa;\">&#9724;</span>\n            <span style=\"font-size:20px;color:#f0e641;\">&#9724;</span>\n            <span style=\"font-size:20px;color:#ff5050;\">&#9724;</span>\n            <span style=\"font-size:20px;color:#960032;\">&#9724;</span>\n            <span style=\"font-size:20px;color:#7d2181;\">&#9724;</span>\n          </div>\n        </td>\n        <td style=\"border:none; vertical-align:top; width:50%\">\n          <h4 style=\"border:none;padding-bottom:0;border-bottom:4px dotted #3c7228;font-size:1.2em;font-weight:700;color:#3c7228\">\n            Dashboards options\n          </h4>\n          <p style=\"font-weight:bold;margin-bottom:10px\">\n            NOTE that most of dashboards, although they start with a large amount of data, can be filtered using the upper filters or with a (multiple - Ctrl key) selection in the legend.\n          </p>\n          <p style=\"text-align:center;margin-left:auto;margin-right:auto;\">\n            <img src=\"public/img/grafana_panel_menu.png\" alt=\"grafana_panel_menu\" height=\"130\">\n          </p>\n          <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" style=\"fill:currentcolor;vertical-align:middle;transform:rotate(45deg);color:rgba(36, 41, 46, 0.75);\">\n            <path d=\"M21,8a1,1,0,0,0,1-1V3a1,1,0,0,0-.08-.38,1,1,0,0,0-.54-.54A1,1,0,0,0,21,2H17a1,1,0,0,0,0,2h1.59L12,10.59,5.41,4H7A1,1,0,0,0,7,2H3a1,1,0,0,0-.38.08,1,1,0,0,0-.54.54A1,1,0,0,0,2,3V7A1,1,0,0,0,4,7V5.41L10.59,12,4,18.59V17a1,1,0,0,0-2,0v4a1,1,0,0,0,.08.38,1,1,0,0,0,.54.54A1,1,0,0,0,3,22H7a1,1,0,0,0,0-2H5.41L12,13.41,18.59,20H17a1,1,0,0,0,0,2h4a1,1,0,0,0,.38-.08,1,1,0,0,0,.54-.54A1,1,0,0,0,22,21V17a1,1,0,0,0-2,0v1.59L13.41,12,20,5.41V7A1,1,0,0,0,21,8Z\"></path>\n          </svg>\n          Move the panel\n          <br/>\n          <svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" style=\"fill:currentcolor;vertical-align:middle;color:rgba(36, 41, 46, 0.75);\">\n            <path d=\"M12,2A10,10,0,1,0,22,12,10.01114,10.01114,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8.00917,8.00917,0,0,1,12,20Zm0-8.5a1,1,0,0,0-1,1v3a1,1,0,0,0,2,0v-3A1,1,0,0,0,12,11.5Zm0-4a1.25,1.25,0,1,0,1.25,1.25A1.25,1.25,0,0,0,12,7.5Z\"></path>\n          </svg>\n          Get the panel description in a tooltip\n          <br/>\n          <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" style=\"fill:currentcolor;vertical-align:middle;color:rgba(36, 41, 46, 0.75);\">\n            <path d=\"M12,7a2,2,0,1,0-2-2A2,2,0,0,0,12,7Zm0,10a2,2,0,1,0,2,2A2,2,0,0,0,12,17Zm0-7a2,2,0,1,0,2,2A2,2,0,0,0,12,10Z\"></path>\n          </svg>\n          <b>Menu</b>: under it, the following options:\n          <ul>\n            <li>\n              <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" style=\"fill:currentcolor;vertical-align:middle;color:rgba(36, 41, 46, 0.75);\">\n                <path d=\"M21.92,11.6C19.9,6.91,16.1,4,12,4S4.1,6.91,2.08,11.6a1,1,0,0,0,0,.8C4.1,17.09,7.9,20,12,20s7.9-2.91,9.92-7.6A1,1,0,0,0,21.92,11.6ZM12,18c-3.17,0-6.17-2.29-7.9-6C5.83,8.29,8.83,6,12,6s6.17,2.29,7.9,6C18.17,15.71,15.17,18,12,18ZM12,8a4,4,0,1,0,4,4A4,4,0,0,0,12,8Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,14Z\"></path>\n              </svg>\n              <b>View</b>: options for expanding the panel for better view.\n            </li>\n            <li>\n              <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" style=\"fill:currentcolor;vertical-align:middle;color:rgba(36, 41, 46, 0.75);\">\n                <path d=\"M18,14a4,4,0,0,0-3.08,1.48l-5.1-2.35a3.64,3.64,0,0,0,0-2.26l5.1-2.35A4,4,0,1,0,14,6a4.17,4.17,0,0,0,.07.71L8.79,9.14a4,4,0,1,0,0,5.72l5.28,2.43A4.17,4.17,0,0,0,14,18a4,4,0,1,0,4-4ZM18,4a2,2,0,1,1-2,2A2,2,0,0,1,18,4ZM6,14a2,2,0,1,1,2-2A2,2,0,0,1,6,14Zm12,6a2,2,0,1,1,2-2A2,2,0,0,1,18,20Z\"></path>\n              </svg>\n              <b>Share</b>: options for sharing\n            </li>\n            <li>\n              <svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" style=\"fill:currentcolor;vertical-align:middle;color:rgba(36, 41, 46, 0.75);\">\n                <path d=\"M12,2A10,10,0,1,0,22,12,10.01114,10.01114,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8.00917,8.00917,0,0,1,12,20Zm0-8.5a1,1,0,0,0-1,1v3a1,1,0,0,0,2,0v-3A1,1,0,0,0,12,11.5Zm0-4a1.25,1.25,0,1,0,1.25,1.25A1.25,1.25,0,0,0,12,7.5Z\"></path>\n              </svg>\n              <b>Inspect</b>: options to deal with the raw data,export CSV, etc.<br>\n            </li>\n            <li>\n              <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" style=\"fill:currentcolor;vertical-align:middle;color:rgba(36, 41, 46, 0.75);\">\n                <path d=\"M20.47,7.37s0,0,0-.08l-.06-.15a.71.71,0,0,0-.07-.09.94.94,0,0,0-.09-.12l-.09-.07L20,6.78l-7.5-4.63a1,1,0,0,0-1.06,0L4,6.78l-.09.08-.09.07a.94.94,0,0,0-.09.12.71.71,0,0,0-.07.09l-.06.15s0,0,0,.08a1.15,1.15,0,0,0,0,.26v8.74a1,1,0,0,0,.47.85l7.5,4.63h0a.47.47,0,0,0,.15.06s.05,0,.08,0a.86.86,0,0,0,.52,0s.05,0,.08,0a.47.47,0,0,0,.15-.06h0L20,17.22a1,1,0,0,0,.47-.85V7.63A1.15,1.15,0,0,0,20.47,7.37ZM11,19.21l-5.5-3.4V9.43L11,12.82Zm1-8.12L6.4,7.63,12,4.18l5.6,3.45Zm6.5,4.72L13,19.21V12.82l5.5-3.39Z\"></path>\n              </svg>\n              <b>Other</b>: other options like hide/show legend\n            </li>\n          </ul>\n        </td>\n      </tr>\n    </table>\n    <br/>\n    <table style=\"border:none;width:95%;font-family:Quicksand,sans-serif;\">\n      <tr>\n        <td style=\"border:none; vertical-align:top; width:50%\">\n          <h5><a href=\"https://aqdr-api.k-healthinair.ari-health.eu/\" target=\"_blank\"><img src=\"public/img/sectionB.png\" alt=\"AQDR\" height=\"20\">&nbsp;Air Quality Data Repository API (AQDR API)</a></h5>\n          This module hosts the <span style=\"font-weight:700;font-stretch:extra-expanded\">K-HEALTHinAIR Air Quality Data Repository Application Programing Interface</span> (API). \n          Through this component, it is possible to:\n          <ul>\n            <li>Consult indoor and outdoor records of our indoor locations in all the pilot sites</li>\n            <li>Filter data retrieval by dates, pilot, scenario, specific scenario building or area</li>\n            <li>Perform several <a href=\"https://aqdr-api.k-healthinair.ari-health.eu/api/swagger-ui/index.html#/Sensors/add_sensor_api_sensors__sensor_id__post\" target=\"_blank\">sensor devices related operations</a> (e.g., register a sensor in the K-HEALTHinAIR Platform, delete an existing sensor device...)[Only for Sensors Pilot Administrators]</li>\n          </ul>\n        </td>\n        <td style=\"border:none; vertical-align:top; width:50%\">\n          <h5><a href=\"https://discrete-air-quality-repository.k-healthinair.ari-health.eu/\" target=\"_blank\"><img src=\"public/img/sectionA.png\" alt=\"DAQSR\" height=\"20\">&nbsp;Discrete Air Quality Samplings Repository (DAQSR)</a></h5>\n          This module hosts the <span style=\"font-weight:700;font-stretch:extra-expanded\">K-HEALTHinAIR Discrete Air Quality Samplings Repository (DAQSR)</span>. Through this component, it is possible to:\n          <ul>\n            <li>Upload discrete samplings of pollutants</li>\n            <li>Download more accurate and detailed studies about an indoor scenario thanks to discrete samplings available</li>\n          </ul>\n        </td>\n      </tr>\n    </table>\n  </span>\n</div>",
+				"mode": "html"
+			},
+			"pluginVersion": "11.4.0",
+			"title": "",
+			"transparent": true,
+			"type": "text"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "This panel shows the main locations (i.e., pilot sites) of the K-HEALTHinAIR project.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"fixedColor": "#3c7228",
+						"mode": "fixed"
+					},
+					"custom": {
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						}
+					},
+					"displayName": "${__field.name}",
+					"links": [],
+					"mappings": [
+						{
+							"options": {
+								"AT": {
+									"color": "#fbcb09",
+									"index": 1,
+									"text": "AT (HOM, SCH)"
+								},
+								"DE": {
+									"color": "#fbcb09",
+									"index": 2,
+									"text": "DE (CAN, LEC)"
+								},
+								"ES": {
+									"color": "#fbcb09",
+									"index": 3,
+									"text": "ES (HOS, HOM, MKT, MET)"
+								},
+								"NL": {
+									"color": "#fbcb09",
+									"index": 5,
+									"text": "NL (HOS, RES, HOM)"
+								},
+								"NO": {
+									"color": "#fbcb09",
+									"index": 4,
+									"text": "NO (RET, CAN)"
+								},
+								"PL": {
+									"color": "#fbcb09",
+									"index": 0,
+									"text": "PL (HOM, SCH)"
+								}
+							},
+							"type": "value"
+						}
+					],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "transparent",
+								"value": null
+							}
+						]
+					}
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 11,
+				"w": 8,
+				"x": 16,
+				"y": 0
+			},
+			"id": 3,
+			"options": {
+				"basemap": {
+					"config": {},
+					"name": "Layer 0",
+					"type": "default"
+				},
+				"controls": {
+					"mouseWheelZoom": false,
+					"showAttribution": false,
+					"showDebug": false,
+					"showMeasure": false,
+					"showScale": false,
+					"showZoom": false
+				},
+				"layers": [
+					{
+						"config": {
+							"showLegend": false,
+							"style": {
+								"color": {
+									"fixed": "#3c7228"
+								},
+								"opacity": 0.9,
+								"rotation": {
+									"fixed": 0,
+									"max": 360,
+									"min": -360,
+									"mode": "mod"
+								},
+								"size": {
+									"fixed": 15,
+									"max": 15,
+									"min": 2
+								},
+								"symbol": {
+									"fixed": "../public/img/grafana_icon_min_map.svg",
+									"mode": "fixed"
+								},
+								"text": {
+									"field": "_value",
+									"fixed": "ES",
+									"mode": "field"
+								},
+								"textConfig": {
+									"fontSize": 15,
+									"offsetX": -6,
+									"offsetY": 20,
+									"textAlign": "left",
+									"textBaseline": "middle"
+								}
+							}
+						},
+						"filterData": {
+							"id": "byRefId",
+							"options": "pilots"
+						},
+						"location": {
+							"lookup": "_value",
+							"mode": "lookup"
+						},
+						"name": "Pilot",
+						"tooltip": true,
+						"type": "markers"
+					}
+				],
+				"tooltip": {
+					"mode": "details"
+				},
+				"view": {
+					"allLayers": true,
+					"id": "coords",
+					"lat": 50.5,
+					"lon": 14.5,
+					"shared": false,
+					"zoom": 3.8
+				}
+			},
+			"pluginVersion": "11.4.0",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "import \"strings\"\r\n\r\nfrom(bucket: \"AIR_QUALITY\")\r\n  |> range(start: -30d, stop:now())\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> group(columns: [\"id_pilot\"])\r\n  |> distinct(column: \"id_pilot\")\r\n  |> map(fn: (r) => ({\r\n      r with \r\n      url:  \"https://aqdr.k-healthinair.eu/dashboards/f/pilot-\" + strings.toLower(v: r._value)\r\n  }))\r\n  |> keep(columns: [\"_value\", \"url\"])",
+					"refId": "pilots"
+				}
+			],
+			"title": "",
+			"transparent": true,
+			"type": "geomap"
+		},
+		{
+			"description": "K-HEALTHinAIR Air Quality Data Model (AQDM) is the base model for all the air quality data of the platform.",
+			"fieldConfig": {
+				"defaults": {},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 10,
+				"w": 8,
+				"x": 16,
+				"y": 11
+			},
+			"id": 4,
+			"options": {
+				"code": {
+					"language": "plaintext",
+					"showLineNumbers": false,
+					"showMiniMap": false
+				},
+				"content": "<style>\n @font-face { font-family: 'Quicksand'; src: url(\"public/fonts/Quicksand.woff2\") format('woff2')}\n\ttr { line-height: 14px; }\n</style>\n<div style=\"font-family: 'Quicksand', sans-serif; font-size: 0.875em;\">\n <table style=\"margin: 0 auto; background-image: linear-gradient(rgba(255,255,255,0.5),rgba(255,255,255,0.5)),url('public/img/Header_Home_si.png')\">\n <thead>\n <tr style=\"font-size: 1.2em;\">\n\t\t <td>Measure/Polutant</td>\n <th style=\"text-align: center;font-weight: bold;\">INDOOR</th>\n <th style=\"text-align: center;font-weight: bold;\">OUTDOOR</th>\n <th>Units</th>\n </tr>\n </thead>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Temperature</th>\n <td>temperature</td>\n <td>out_temperature</td>\n <td>ºC</td>\n </tr>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Humidity</th>\n <td>humidity</td>\n <td>out_humidity</td>\n <td>%RH</td>\n </tr>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Particulates Matter (⌀ ≤10 µm)</th>\n <td>pm10</td>\n <td>out_pm10</td>\n <td>µg/m³</td>\n </tr>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Particulates Matter (⌀ ≤2.5 µm)</th>\n <td>pm25</td>\n <td>out_pm25</td>\n <td>µg/m³</td>\n </tr>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Particulates Matter (⌀ ≤1 µm)</th>\n <td>pm1</td>\n <td>-</td>\n <td>µg/m³</td>\n </tr>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Carbon Dioxide (CO2)</th>\n <td>co2</td>\n <td>-</td>\n <td>ppm</td>\n </tr>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Total Volatile Organic Compounds</th>\n <td>tvocs</td>\n <td>-</td>\n <td>ppb</td>\n </tr>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Formadehydes (CH2O)</th>\n <td>formaldehyde</td>\n <td>-</td>\n <td>µg/m³</td>\n </tr>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Carbon Monoxide (CO)</th>\n <td>-</td>\n <td>out_co*</td>\n <td>ppm</td>\n </tr>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Nitrogen Dioxide (NO2)</th>\n <td>-</td>\n <td>out_no2</td>\n <td>ppb</td>\n </tr>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Sulfure Dioxide (SO2)</th>\n <td>-</td>\n <td>out_so2*</td>\n <td>ppb</td>\n </tr>\n <tr>\n <th style=\"text-align: right; font-weight: bold;\">Ozone (O3)</th>\n <td>-</td>\n <td>out_o3</td>\n <td>ppb</td>\n </tr>\n <tr>\n <th colspan=4>\n <p style=\"text-align: right;\"><i>* Not available in Kunak</i></p>\n </th>\n </tr>\n </tbody>\n</table>",
+				"mode": "html"
+			},
+			"pluginVersion": "11.4.0",
+			"title": "",
+			"transparent": true,
+			"type": "text"
+		}
+	],
+	"preload": false,
+	"refresh": "",
+	"schemaVersion": 40,
+	"tags": [
+		"at",
+		"de",
+		"es",
+		"nl",
+		"no",
+		"pl"
+	],
+	"templating": {
+		"list": []
+	},
+	"time": {
+		"from": "now-6h",
+		"to": "now"
+	},
+	"timepicker": {
+		"hidden": true,
+		"refresh_intervals": []
+	},
+	"timezone": "",
+	"title": "0. Home Page",
+	"uid": "home",
+	"version": 1,
+	"weekStart": "monday"
+}

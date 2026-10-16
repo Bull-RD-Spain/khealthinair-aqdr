@@ -1,0 +1,39 @@
+### VS Code ###
+.vscode/
+*.tar
+
+.project
+.classpath
+
+### Own tests ###
+__pycache__
+
+# Files
+*.xlsx
+*.csv
+
+# Tests
+.coverage
+coverage.xml
+junit/
+.pytest_cache
+htmlcov/
+testing/
+
+# SonarQube
+.scannerwork
+
+**/bin/
+**/build/
+**/*.egg-info/
+**/aqdr-ingestor/build/
+gitleaks-report*.json
+
+### Local env files (may contain secrets) — use the *.env.example templates ###
+**/.env
+**/*.env
+!**/.env.example
+!**/*.env.example
+
+### AQDR-API users file (contains password hashes) — use aqdr-api-users.example.json ###
+**/aqdr-api-users.json

@@ -1,0 +1,626 @@
+{
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": {
+					"type": "grafana",
+					"uid": "-- Grafana --"
+				},
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"type": "dashboard"
+			}
+		]
+	},
+	"description": "The Pilot Overview dashboard is similar to the general Continuous Monitoring Air Quality Overviews, but with the filter and limitation already applied for the specific pilot location. On it all the aggregated measurements are available in a single common panel and, since the data scope is limited, it can be used as a pilot's main page when limit access to users to that scope is needed and the general one is not offered to avoid access to other pilots’ data. Furthermore, this allows to potentially differentiate the specific pilots overview panels if some aspects or information shown needs to be customized. As in the general one, this view allows the comparison of all of the measurements aggregated, which allow global exports, but its filtering via top filters or selection in the legend will generally be necessary for practical use.",
+	"editable": false,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"links": [],
+	"liveNow": false,
+	"panels": [
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"gridPos": {
+				"h": 2,
+				"w": 24,
+				"x": 0,
+				"y": 0
+			},
+			"id": 4,
+			"options": {
+				"code": {
+					"language": "plaintext",
+					"showLineNumbers": false,
+					"showMiniMap": false
+				},
+				"content": "<style>\n  @font-face {font-family: 'Quicksand';src: url(\"public/fonts/Quicksand.woff2\") format('woff2')}\n</style>\n<div style=\"color:#548343; font-weight:bold; background-color:#b8bb62; font-size:larger;\">\n  &nbsp;Netherlands Pilot Overview\n</div>\n<div style=\"color:#548343; font-weight:normal;\">\n  <b>Rotterdam</b> study covers the two approaches proposed by the project:\n  <ol>\n    <li>Follow up of <b>high-risk outpatients with COPD:</b>:<br>\n      The work with the <b>outpatients</b> (50 high-risk outpatients and 60 elderly residents) is focused on analyzing the relationships between patient’s home IAQ and health status with focus on acute health effects. It includes the collection of health-related data such as medical surveillance, PROMS, PREMS, questionnaires and the monitoring of relevant parameters, T, RH, CO2, PM, VOCs and formaldehyde.\n    <li><b>Analysis of 2 relevant settings, hospital areas and a senior home (common areas)</b>:<br>   \n      The work with the <b>settings</b>, hospital and senior home, is focused on monitoring of the relevant parameters, T, RH, CO2, PM, VOCs and formaldehyde, the sampling of VOCs (including formaldehyde) in the IAQ, the collection of OAQ in the surrounding areas and the use of questionnaires with the staff (because in principle this is the population group spending more time inside these settings).\n    </li>\n</ol>\n  <span style=\"color:#fbcb09;\"><a href=\"https://k-healthinair.eu/rotterdam/\">Netherlands Pilot description</a>.</span><br>\n  <span style=\"color:#fbcb09;\">More info about manipulating pannels in the <a href=\"/d/home/\">Home screen</a></span>\n</div>",
+				"mode": "html"
+			},
+			"pluginVersion": "10.4.3",
+			"transparent": true,
+			"type": "text"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "This is the main, basic dashboard for the Germany Pilot. Filtering by type of indoor scenario, specific scenario building, area, sensor device, indoor or outdoor air quality data and also pollutant is possible. Dashed lines are outdoor air quality data and each individual type of pollutant has its own color in the graph.",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisBorderShow": true,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 0,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}]",
+					"mappings": [],
+					"min": 0,
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							}
+						]
+					}
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*temperature/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-blue",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (ºC)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*humidity/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-purple",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (%RH)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*tvocs/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-red",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (ppb)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*pm/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-yellow",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (µg/m³)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*co2/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-green",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (ppm)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*formaldehyhde/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (µg/m³)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*out_temperature/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "super-light-blue",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (ºC)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*out_humidity/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "super-light-purple",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (%RH)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*out_co/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "super-light-green",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (ppb)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*out_pm/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "super-light-yellow",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (µg/m³)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*out_so2/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "super-light-orange",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (ppb)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*out_no2/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-orange",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (ppb)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*out_o3/"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "orange",
+									"mode": "fixed"
+								}
+							},
+							{
+								"id": "displayName",
+								"value": "${__field.name} [${__field.labels.id_pilot}${__field.labels.area}] (ppb)"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*out_/"
+						},
+						"properties": [
+							{
+								"id": "custom.lineStyle",
+								"value": {
+									"dash": [
+										10,
+										10
+									],
+									"fill": "dash"
+								}
+							},
+							{
+								"id": "custom.fillOpacity",
+								"value": 2
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 16,
+				"w": 24,
+				"x": 0,
+				"y": 2
+			},
+			"id": 2,
+			"maxDataPoints": 10000,
+			"options": {
+				"legend": {
+					"calcs": [
+						"min",
+						"max",
+						"mean",
+						"stdDev",
+						"count",
+						"diffperc"
+					],
+					"displayMode": "table",
+					"placement": "bottom",
+					"showLegend": true,
+					"sortBy": "Name",
+					"sortDesc": false
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "asc"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot == \"NL\")\r\n  |> filter(fn: (r) => r.AQ =~ /^${aq:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> filter(fn: (r) => r.sensor_id =~ /^${sensor_id:regex}$/)\r\n  |> filter(fn: (r) => r._field =~ /^${pollutant:regex}$/)\r\n  ",
+					"refId": "A"
+				}
+			],
+			"transparent": true,
+			"type": "timeseries"
+		}
+	],
+	"refresh": "",
+	"schemaVersion": 39,
+	"tags": [
+		"nl"
+	],
+	"templating": {
+		"list": [
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"description": "Allows filtering according to indoor or outdoor air quality data.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "IAQ/OAQ",
+				"multi": true,
+				"name": "aq",
+				"options": [
+					{
+						"selected": true,
+						"text": "All",
+						"value": "$__all"
+					},
+					{
+						"selected": false,
+						"text": "Indoor",
+						"value": "IAQ"
+					},
+					{
+						"selected": false,
+						"text": "Outdoor",
+						"value": "OAQ"
+					}
+				],
+				"query": "Indoor : IAQ, Outdoor : OAQ",
+				"queryValue": "",
+				"skipUrlSync": false,
+				"type": "custom"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"description": "Allows filtering air quality data according to type of scenario location.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Scenario",
+				"multi": true,
+				"name": "scenario",
+				"options": [
+					{
+						"selected": true,
+						"text": "All",
+						"value": "$__all"
+					},
+					{
+						"selected": false,
+						"text": "Homes (HOM)",
+						"value": "HOM"
+					},
+					{
+						"selected": false,
+						"text": "Schools (SCH)",
+						"value": "SCH"
+					}
+				],
+				"query": "Homes (HOM) : HOM, Schools (SCH) : SCH",
+				"queryValue": "",
+				"skipUrlSync": false,
+				"type": "custom"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) =>  r.id_pilot == \"NL\")\r\n  |> filter(fn: (r) =>  r.scenario =~ /^${scenario:regex}$/)\r\n  |> group(columns: [\"sub_scenario\"])\r\n  |> distinct(column: \"sub_scenario\")\r\n  |> keep(columns: [\"_value\"])",
+				"description": "Allows filtering air quality data according to specific scenario location.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "SubScenario",
+				"multi": true,
+				"name": "sub_scenario",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) =>  r.id_pilot == \"NL\")\r\n  |> filter(fn: (r) =>  r.scenario =~ /^${scenario:regex}$/)\r\n  |> group(columns: [\"sub_scenario\"])\r\n  |> distinct(column: \"sub_scenario\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot == \"NL\")\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> group(columns: [\"area\"])\r\n  |> distinct(column: \"area\")\r\n  |> keep(columns: [\"_value\"])\r\n",
+				"description": "Allows filtering air quality data according to specific area location.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Area",
+				"multi": true,
+				"name": "area",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot == \"NL\")\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> group(columns: [\"area\"])\r\n  |> distinct(column: \"area\")\r\n  |> keep(columns: [\"_value\"])\r\n",
+				"refresh": 2,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": false,
+					"text": "All",
+					"value": "$__all"
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot == \"NL\")\r\n  |> filter(fn: (r) => r.AQ =~ /^${aq:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> group(columns: [\"_field\"])\r\n  |> distinct(column: \"_field\")\r\n  |> keep(columns: [\"_value\"])",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Pollutant",
+				"multi": true,
+				"name": "pollutant",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot == \"NL\")\r\n  |> filter(fn: (r) => r.AQ =~ /^${aq:regex}$/)\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> group(columns: [\"_field\"])\r\n  |> distinct(column: \"_field\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 2,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": [
+						"All"
+					],
+					"value": [
+						"$__all"
+					]
+				},
+				"datasource": {
+					"type": "influxdb",
+					"uid": "aqdr-ts-db-flux"
+				},
+				"definition": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot == \"NL\")\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> group(columns: [\"sensor_id\"])\r\n  |> distinct(column: \"sensor_id\")\r\n  |> keep(columns: [\"_value\"])",
+				"description": "Allows filtering air quality data according to specific sensor device.",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Sensor ID",
+				"multi": true,
+				"name": "sensor_id",
+				"options": [],
+				"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.id_pilot == \"NL\")\r\n  |> filter(fn: (r) => r.scenario =~ /^${scenario:regex}$/)\r\n  |> filter(fn: (r) => r.sub_scenario =~ /^${sub_scenario:regex}$/)\r\n  |> filter(fn: (r) => r.area =~ /^${area:regex}$/)\r\n  |> group(columns: [\"sensor_id\"])\r\n  |> distinct(column: \"sensor_id\")\r\n  |> keep(columns: [\"_value\"])",
+				"refresh": 2,
+				"regex": "(?<value>(?<text>^.{0,5}).+)",
+				"skipUrlSync": false,
+				"sort": 0,
+				"type": "query"
+			}
+		]
+	},
+	"time": {
+		"from": "now-24h",
+		"to": "now"
+	},
+	"timepicker": "",
+	"timezone": "",
+	"title": "Pilot Overview",
+	"uid": "netherlands-pilot-overview",
+	"version": 1,
+	"weekStart": ""
+}

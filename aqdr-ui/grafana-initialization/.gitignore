@@ -1,0 +1,4 @@
+.openapi-generator-ignore
+.openapi-generator*
+grafana_client_README.md
+aqdr-ui-initialization.log

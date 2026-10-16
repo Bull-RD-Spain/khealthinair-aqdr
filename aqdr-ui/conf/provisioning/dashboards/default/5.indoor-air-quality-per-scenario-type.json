@@ -1,0 +1,1744 @@
+{
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": {
+					"type": "grafana",
+					"uid": "-- Grafana --"
+				},
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"type": "dashboard"
+			}
+		]
+	},
+	"description": "An overview of all pilot sensor devices involved in continuous monitoring grouped by scenario types.",
+	"editable": true,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"links": [],
+	"liveNow": false,
+	"panels": [
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"gridPos": {
+				"h": 2,
+				"w": 24,
+				"x": 0,
+				"y": 0
+			},
+			"id": 14,
+			"options": {
+				"code": {
+					"language": "plaintext",
+					"showLineNumbers": false,
+					"showMiniMap": false
+				},
+				"content": "<style>\n  @font-face {font-family: 'Quicksand';src: url(\"public/fonts/Quicksand.woff2\") format('woff2')}\n</style>\n<div style=\"color:#548343; font-weight:bold; background-color:#b8bb62; font-size:larger;\">\n  &nbsp;Indoor Air Quality per Scenario type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<mark>ATTENTION!, the biography shown is a sample, pending review</mark>\n</div>\n<div style=\"color:#548343; font-weight:normal;\">\n  An overview of all pilot sensor devices involved in continuous monitoring grouped by scenario types. Includes bibliographic reference information for interpretation of the totalized values and allows the comparison of situations in different scenarios, in search of patterns or correlations.<br/>\n  <span style=\"color:#fbcb09;\">More info about manipulating pannels in the <a href=\"/d/home/\">Home screen</a></span>\n</div>",
+				"mode": "html"
+			},
+			"pluginVersion": "10.4.3",
+			"transparent": true,
+			"type": "text"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"fixedColor": "#b8bb62",
+						"mode": "thresholds"
+					},
+					"decimals": 0,
+					"displayName": "${__field.labels.scenario}",
+					"mappings": [],
+					"max": 50,
+					"min": 10,
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "#b8bb62",
+								"value": null
+							}
+						]
+					},
+					"unit": "celsius"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOS/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Hospitals"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*SCH/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Schools"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*CAN/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Canteens"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOM/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Retirement Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*LEC/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Lecture Halls"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MKT/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Markets"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Metro Stations"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RES/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Residence Homes"
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 4,
+				"w": 12,
+				"x": 0,
+				"y": 2
+			},
+			"id": 1,
+			"options": {
+				"colorMode": "background",
+				"graphMode": "area",
+				"justifyMode": "auto",
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"mean"
+					],
+					"fields": "",
+					"values": false
+				},
+				"showPercentChange": false,
+				"text": {},
+				"textMode": "auto",
+				"wideLayout": true
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"temperature\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"title": "Average Indoor Temperature",
+			"transparent": true,
+			"type": "stat"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"fixedColor": "light-blue",
+						"mode": "fixed"
+					},
+					"decimals": 0,
+					"displayName": "${__field.labels.scenario}",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "transparent",
+								"value": null
+							}
+						]
+					},
+					"unit": "humidity"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOS/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Hospitals"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*SCH/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Schools"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*CAN/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Canteens"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOM/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Retirement Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*LEC/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Lecture Halls"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MKT/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Markets"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Metro Stations"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RES/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Residence Homes"
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 4,
+				"w": 12,
+				"x": 12,
+				"y": 2
+			},
+			"id": 2,
+			"options": {
+				"colorMode": "background",
+				"graphMode": "area",
+				"justifyMode": "auto",
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"mean"
+					],
+					"fields": "",
+					"values": false
+				},
+				"showPercentChange": false,
+				"text": {},
+				"textMode": "auto",
+				"wideLayout": true
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"humidity\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"title": "Average Indoor Humidity",
+			"transparent": true,
+			"type": "stat"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "thresholds"
+					},
+					"decimals": 0,
+					"mappings": [
+						{
+							"options": {
+								"from": 0,
+								"result": {
+									"color": "#50f0e6",
+									"index": 0,
+									"text": "Healthy"
+								},
+								"to": 70
+							},
+							"type": "range"
+						},
+						{
+							"options": {
+								"from": 0,
+								"result": {
+									"color": "#50ccaa",
+									"index": 1,
+									"text": "Healthy"
+								},
+								"to": 200
+							},
+							"type": "range"
+						},
+						{
+							"options": {
+								"from": 200,
+								"result": {
+									"color": "#f0e641",
+									"index": 2,
+									"text": "Unhealthy"
+								},
+								"to": 1000
+							},
+							"type": "range"
+						},
+						{
+							"options": {
+								"from": 1000,
+								"result": {
+									"color": "#ff5050",
+									"index": 3,
+									"text": "Danger"
+								},
+								"to": 5000
+							},
+							"type": "range"
+						},
+						{
+							"options": {
+								"from": 5000,
+								"result": {
+									"color": "#7d2181",
+									"index": 4,
+									"text": "Ext. Dangerous"
+								},
+								"to": 2000000
+							},
+							"type": "range"
+						}
+					],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "#50f0e6",
+								"value": null
+							},
+							{
+								"color": "#50ccaa",
+								"value": 70
+							},
+							{
+								"color": "#f0e641",
+								"value": 200
+							},
+							{
+								"color": "#ff5050",
+								"value": 1000
+							},
+							{
+								"color": "#960032",
+								"value": 5000
+							},
+							{
+								"color": "#7d2181",
+								"value": 10000
+							}
+						]
+					},
+					"unit": "conppb"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "."
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 2,
+				"w": 12,
+				"x": 0,
+				"y": 6
+			},
+			"id": 16,
+			"options": {
+				"colorMode": "value",
+				"graphMode": "area",
+				"justifyMode": "auto",
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"mean"
+					],
+					"fields": "",
+					"values": false
+				},
+				"showPercentChange": false,
+				"text": {
+					"titleSize": 0,
+					"valueSize": 20
+				},
+				"textMode": "value",
+				"wideLayout": true
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"tvocs\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"title": "Average Indoor Total VOCs",
+			"transparent": true,
+			"type": "stat"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"gridPos": {
+				"h": 6,
+				"w": 12,
+				"x": 12,
+				"y": 6
+			},
+			"id": 4,
+			"options": {
+				"code": {
+					"language": "plaintext",
+					"showLineNumbers": false,
+					"showMiniMap": false
+				},
+				"content": "<style>\n  @font-face {font-family: 'Quicksand';src: url(\"public/fonts/Quicksand.woff2\") format('woff2')}\n</style>\n<div style=\"color:#548343; font-weight:bold; background-color:#b8bb62;\">\n  &nbsp;TVOCs levels and potential health problems\n</div>\n<div style=\"color:#548343;\">\n  An overview of all pilot sensor devices involved in continuous monitoring grouped by scenario types. Includes bibliographic reference information for interpretation of the totalized values and allows the comparison of situations in different scenarios, in search of patterns or correlations.<br>\n  The 5 stages or so-called IAQ levels extend from Level 1 (excellent) to Level 5 (unhealthy).\n  Extended exposure to increased IAQ levels, i.e., to bad air, can affect the comfort, well-being, and health of building occupants. Poor indoor air quality is linked, e.g., to sick building syndrome, reduced productivity, and impaired learning in schools.<br>\n  Note the following <i>thresholds:</i><br>\n  &nbsp;<span style=\\\"font-size:20px;color:#50f0e6;\\\">&#9724;</span>&nbsp;<b>&le;70 ppb</b>: Excellent<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#50ccaa;\\\">&#9724;</span>&nbsp;<b>70-200 ppb</b>: Healthy<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#f0e641;\\\">&#9724;</span>&nbsp;<b>200-1000 ppb</b>: Unhealthy<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#ff5050;\\\">&#9724;</span>&nbsp;<b>1000-5000 ppb</b>: Danger<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#7d2181;\\\">&#9724;</span>&nbsp;<b>&GreaterEqual;5000 ppb</b>: Hazardous<br>\n  <span style=\"color:#fbcb09;\">More info:</span>\n    <ul>\n      <li><a href=\"https://iris.who.int/handle/10665/345329\" target=\"_blank\">World Health Organization (WHO) air quality guidelines (AQGs)</a></li>\n    </ul>\n</div>",
+				"mode": "html"
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"co2\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"transparent": true,
+			"type": "text"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "thresholds"
+					},
+					"displayName": "${__field.labels.scenario}",
+					"mappings": [],
+					"max": 10000,
+					"min": 0,
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "#50f0e6",
+								"value": null
+							},
+							{
+								"color": "#50ccaa",
+								"value": 70
+							},
+							{
+								"color": "#f0e641",
+								"value": 200
+							},
+							{
+								"color": "#ff5050",
+								"value": 1000
+							},
+							{
+								"color": "#960032",
+								"value": 5000
+							},
+							{
+								"color": "#7d2181",
+								"value": 10000
+							}
+						]
+					},
+					"unit": "conppb"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOS/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Hospitals"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*SCH/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Schools"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*CAN/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Canteens"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOM/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Retirement Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*LEC/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Lecture Halls"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MKT/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Markets"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Metro Stations"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RES/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Residence Homes"
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 4,
+				"w": 12,
+				"x": 0,
+				"y": 8
+			},
+			"id": 3,
+			"options": {
+				"minVizHeight": 75,
+				"minVizWidth": 75,
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"lastNotNull"
+					],
+					"fields": "",
+					"values": false
+				},
+				"showThresholdLabels": false,
+				"showThresholdMarkers": true,
+				"sizing": "auto"
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"tvocs\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"transparent": true,
+			"type": "gauge"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "thresholds"
+					},
+					"decimals": 2,
+					"displayName": "${__field.labels.scenario}",
+					"mappings": [],
+					"max": 200,
+					"min": 0,
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "#50f0e6",
+								"value": null
+							},
+							{
+								"color": "#50ccaa",
+								"value": 54
+							},
+							{
+								"color": "#f0e641",
+								"value": 154
+							},
+							{
+								"color": "#ff5050",
+								"value": 254
+							},
+							{
+								"color": "#960032",
+								"value": 354
+							},
+							{
+								"color": "#7d2181",
+								"value": 424
+							}
+						]
+					},
+					"unit": "conμgm3"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOS/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Hospitals"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*SCH/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Schools"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*CAN/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Canteens"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOM/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Retirement Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*LEC/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Lecture Halls"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MKT/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Markets"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Metro Stations"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RES/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Residence Homes"
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 5,
+				"w": 12,
+				"x": 0,
+				"y": 12
+			},
+			"id": 8,
+			"options": {
+				"minVizHeight": 75,
+				"minVizWidth": 75,
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"mean"
+					],
+					"fields": "",
+					"values": false
+				},
+				"showThresholdLabels": false,
+				"showThresholdMarkers": true,
+				"sizing": "auto"
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"pm10\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"title": "Average Indoor PM10",
+			"transparent": true,
+			"type": "gauge"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"gridPos": {
+				"h": 5,
+				"w": 12,
+				"x": 12,
+				"y": 12
+			},
+			"id": 9,
+			"options": {
+				"code": {
+					"language": "plaintext",
+					"showLineNumbers": false,
+					"showMiniMap": false
+				},
+				"content": "<style>\n  @font-face {font-family: 'Quicksand';src: url(\"public/fonts/Quicksand.woff2\") format('woff2')}\n</style>\n<div style=\"color:#548343; font-weight:bold; background-color:#b8bb62;\">\n  &nbsp;PM10 levels and potential health problems\n</div>\n<div style=\"color:#548343; font-weight:normal;\">\n  PM10 is used when TBC... Most studies indicate the following <i>thresholds:</i><br>\n  &nbsp;<span style=\\\"font-size:20px;color:#50f0e6;\\\">&#9724;</span>&nbsp;<b>&leq;54 µg/m³</b>: Good<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#50ccaa;\\\">&#9724;</span>&nbsp;<b>&gt;154 µg/m³</b>: Moderate<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#f0e641;\\\">&#9724;</span>&nbsp;<b>&gt;254 µg/m³</b>: Unhealthy for sensitive individuals<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#ff5050;\\\">&#9724;</span>&nbsp;<b>&gt;354 µg/m³</b>: Unhealthy<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#960032;\\\">&#9724;</span>&nbsp;<b>&gt;424 µg/m³</b>: Very unhealthy<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#7d2181;\\\">&#9724;</span>&nbsp;<b>&GreaterEqual;425 µg/m³</b>: Hazardous<br>\n  <span style=\"color:#fbcb09;\">More info:</span>\n    <ul>\n      <li><a href=\"https://iris.who.int/handle/10665/345329\" target=\"_blank\">World Health Organization (WHO) air quality guidelines (AQGs)</a></li>\n    </ul>\n</div>",
+				"mode": "markdown"
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"co2\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"transparent": true,
+			"type": "text"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "thresholds"
+					},
+					"decimals": 2,
+					"displayName": "${__field.labels.scenario}",
+					"mappings": [],
+					"max": 200,
+					"min": 0,
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "#50f0e6",
+								"value": null
+							},
+							{
+								"color": "#50ccaa",
+								"value": 20
+							},
+							{
+								"color": "#f0e641",
+								"value": 40
+							},
+							{
+								"color": "#ff5050",
+								"value": 50
+							},
+							{
+								"color": "#960032",
+								"value": 100
+							},
+							{
+								"color": "#7d2181",
+								"value": 150
+							}
+						]
+					},
+					"unit": "conμgm3"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOS/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Hospitals"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*SCH/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Schools"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*CAN/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Canteens"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOM/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Retirement Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*LEC/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Lecture Halls"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MKT/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Markets"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Metro Stations"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RES/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Residence Homes"
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 5,
+				"w": 12,
+				"x": 0,
+				"y": 17
+			},
+			"id": 6,
+			"options": {
+				"minVizHeight": 75,
+				"minVizWidth": 75,
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"lastNotNull"
+					],
+					"fields": "",
+					"values": false
+				},
+				"showThresholdLabels": false,
+				"showThresholdMarkers": true,
+				"sizing": "auto"
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"pm25\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"title": "Average Indoor PM2.5",
+			"transparent": true,
+			"type": "gauge"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"gridPos": {
+				"h": 5,
+				"w": 12,
+				"x": 12,
+				"y": 17
+			},
+			"id": 7,
+			"options": {
+				"code": {
+					"language": "plaintext",
+					"showLineNumbers": false,
+					"showMiniMap": false
+				},
+				"content": "<style>\n  @font-face {font-family: 'Quicksand';src: url(\"public/fonts/Quicksand.woff2\") format('woff2')}\n</style>\n<div style=\"color:#548343; font-weight:bold; background-color:#b8bb62;\">\n  &nbsp;PM2.5 levels and potential health problems\n</div>\n<div style=\"color:#548343; font-weight:normal;\">\n  PM2.5 is used when describing pollutant levels both outdoor and indoor, where health impact from exposure considers amount of PM2.5 over a 24-hour period. Most studies indicate the following <i>thresholds:</i><br>\n  &nbsp;<span style=\\\"font-size:20px;color:#50ccaa;\\\">&#9724;</span>&nbsp;<b>&leq;12 µg/m³</b>: healthy with little to no risk from exposure<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#ff5050;\\\">&#9724;</span>&nbsp;<b>&gt;35 µg/m³</b>: unhealthy and can cause issues for people with existing breathing issues such as asthma<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#7d2181;\\\">&#9724;</span>&nbsp;<b>&GreaterEqual;50 µg/m³</b>:  can lead to serious health issues and premature mortality<br>\n  <span style=\"color:#fbcb09;\">More info:</span>\n    <ul>\n      <li><a href=\"https://iris.who.int/handle/10665/345329\" target=\"_blank\">World Health Organization (WHO) air quality guidelines (AQGs)</a></li>\n      <li><a href=\"https://www.eea.europa.eu/data-and-maps/figures/mortality-due-to-different-causes\" target=\"_blank\">Mortality due to different causes for PM₂.₅ and NO₂, 2021</a></li>\n      <li><a href=\"https://www.eea.europa.eu/en/analysis/indicators/health-impacts-of-exposure-to\" target=\"_blank\">Premature deaths due to exposure to fine particulate matter in Europe, 2023</a></li>\n      <li>Norway, Poland Recommendations: 40 µg/m³ (8h).</li>\n    </ul>\n</div>",
+				"mode": "html"
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"co2\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"transparent": true,
+			"type": "text"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "thresholds"
+					},
+					"displayName": "${__field.labels.scenario}",
+					"mappings": [],
+					"max": 40000,
+					"min": 0,
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "#50f0e6",
+								"value": null
+							},
+							{
+								"color": "#50ccaa",
+								"value": 400
+							},
+							{
+								"color": "#f0e641",
+								"value": 1000
+							},
+							{
+								"color": "#ff5050",
+								"value": 2000
+							},
+							{
+								"color": "#960032",
+								"value": 5000
+							},
+							{
+								"color": "#7d2181",
+								"value": 40000
+							}
+						]
+					},
+					"unit": "ppm"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOS/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Hospitals"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*SCH/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Schools"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*CAN/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Canteens"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOM/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Retirement Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*LEC/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Lecture Halls"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MKT/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Markets"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Metro Stations"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RES/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Residence Homes"
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 5,
+				"w": 12,
+				"x": 0,
+				"y": 22
+			},
+			"id": 10,
+			"options": {
+				"minVizHeight": 75,
+				"minVizWidth": 75,
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"lastNotNull"
+					],
+					"fields": "",
+					"values": false
+				},
+				"showThresholdLabels": false,
+				"showThresholdMarkers": true,
+				"sizing": "auto"
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"co2\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"title": "Average Indoor CO2",
+			"transparent": true,
+			"type": "gauge"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"gridPos": {
+				"h": 5,
+				"w": 12,
+				"x": 12,
+				"y": 22
+			},
+			"id": 11,
+			"options": {
+				"code": {
+					"language": "plaintext",
+					"showLineNumbers": false,
+					"showMiniMap": false
+				},
+				"content": "<style>\n  @font-face {font-family: 'Quicksand';src: url(\"public/fonts/Quicksand.woff2\") format('woff2')}\n</style>\n<div style=\"color:#548343; font-weight:bold; background-color:#b8bb62;\">\n  &nbsp;CO2 levels and potential health problems\n</div>\n<div style=\"color:#548343;\">\n  The levels of CO2 in the air and potential health problems <i>thresholds</i> are:<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#50f0e6;\\\">&#9724;</span>&nbsp;<b>&leq;400 ppm</b>: typical level found in occupied spaces with good air exchange.<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#50ccaa;\\\">&#9724;</span>&nbsp;<b>400-1000 ppm</b>: level associated with complaints of drowsiness and poor air<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#f0e641;\\\">&#9724;</span>&nbsp;<b>1000-2000 ppm</b>: level associated with complaints of drowsiness and poor air<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#ff5050;\\\">&#9724;</span>&nbsp;<b>2000-5000 ppm</b>: level associated with headaches, sleepiness, and stagnant, stale, stuffy air. Poor concentration, loss of attention, increased heart rate and slight nausea may also be present<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#960032;\\\">&#9724;</span>&nbsp;<b>&gt;5000 ppm</b>: this indicates unusual air conditions where high levels of other gases could also be present. Toxicity or oxygen deprivation could occur. This is the permissible exposure limit for daily workplace exposures<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#7d2181;\\\">&#9724;</span>&nbsp;<b>&gt;40000 ppm</b>: this level is immediately harmful due to oxygen deprivation<br>\n  <span style=\"color:#fbcb09;\">More info:</span>\n    <ul>\n      <li><a href=\"https://iris.who.int/handle/10665/345329\" target=\"_blank\">World Health Organization (WHO) air quality guidelines (AQGs)</a></li>\n    </ul>\n</div>",
+				"mode": "html"
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"co2\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"transparent": true,
+			"type": "text"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "thresholds"
+					},
+					"displayName": "${__field.labels.scenario}",
+					"mappings": [],
+					"max": 40,
+					"min": 10,
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "#50f0e6",
+								"value": null
+							},
+							{
+								"color": "#50ccaa",
+								"value": 15
+							},
+							{
+								"color": "#f0e641",
+								"value": 20
+							},
+							{
+								"color": "#ff5050",
+								"value": 25
+							},
+							{
+								"color": "#960032",
+								"value": 30
+							},
+							{
+								"color": "#7d2181",
+								"value": 35
+							}
+						]
+					},
+					"unit": "conμgm3"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOS/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Hospitals"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*SCH/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Schools"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*CAN/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Canteens"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*HOM/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Retirement Homes"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*LEC/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Lecture Halls"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MKT/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Markets"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*MET/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Metro Stations"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byRegexp",
+							"options": "/.*RES/"
+						},
+						"properties": [
+							{
+								"id": "displayName",
+								"value": "Residence Homes"
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 5,
+				"w": 12,
+				"x": 0,
+				"y": 27
+			},
+			"id": 12,
+			"options": {
+				"minVizHeight": 75,
+				"minVizWidth": 75,
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"lastNotNull"
+					],
+					"fields": "",
+					"values": false
+				},
+				"showThresholdLabels": false,
+				"showThresholdMarkers": true,
+				"sizing": "auto"
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"formaldehyde\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"title": "Average Indoor Total Formaldehyde",
+			"transparent": true,
+			"type": "gauge"
+		},
+		{
+			"datasource": {
+				"type": "influxdb",
+				"uid": "aqdr-ts-db-flux"
+			},
+			"description": "",
+			"gridPos": {
+				"h": 5,
+				"w": 12,
+				"x": 12,
+				"y": 27
+			},
+			"id": 15,
+			"options": {
+				"code": {
+					"language": "plaintext",
+					"showLineNumbers": false,
+					"showMiniMap": false
+				},
+				"content": "<style>\n  @font-face {font-family: 'Quicksand';src: url(\"public/fonts/Quicksand.woff2\") format('woff2')}\n</style>\n<div style=\"color:#548343; font-weight:bold; background-color:#b8bb62;\">\n  &nbsp;Total Formaldehyde and potential health problems\n</div>\n<div style=\"color:#548343;\">\n  Proposerd <i>thresholds in ppm</i> are:<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#50f0e6;\\\">&#9724;</span>&nbsp;<b>&lt0.1 ppm</b>: Examples concentrations of formaldehyde: 0.0002-0.006 ppm (in rural and suburban outdoor air), 0.0015-0.047 ppm (in urban outdoor air), 0.020-4 ppm (in indoor air).<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#50ccaa;\\\">&#9724;</span>&nbsp;<b>0.1-0.5 ppm</b>: Nasal and eye irritation, neurological effects, increase risk of asthma and/or allergies.<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#f0e641;\\\">&#9724;</span>&nbsp;<b>0.6-1.9 ppm</b>: Nasal and eye irritation, eczema, change in pulmonary function.<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#ff5050;\\\">&#9724;</span>&nbsp;<b>2-5.9 ppm</b>: Nasal, eye and throat irritation, eczema or skin irritation, change in pulmonary function.<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#960032;\\\">&#9724;</span>&nbsp;<b>6-10.9 ppm</b>: Nasal, eye, throat and skin irritation, headache, nausea, disconfort in breathing, cough.<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#7d2181;\\\">&#9724;</span>&nbsp;<b>&gt;11 ppm</b>: (probably) nasal and eye irritation, nasal ulceration, change in pulmonary function, neurological effects, liver effects decreased body weight, decreased fetal weight, nasal tumors, reduced survival... bloody nasal discharge, pulmonary edema.<br>\n  Proposerd <i>thresholds in µg/m³</i> are:<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#50f0e6;\\\">&#9724;</span>&nbsp;<b>&lt;15 µg/m³</b>: ????.<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#50ccaa;\\\">&#9724;</span>&nbsp;<b>15-20 µg/m³</b>: ????<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#f0e641;\\\">&#9724;</span>&nbsp;<b>21-25 µg/m³</b>: ????<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#ff5050;\\\">&#9724;</span>&nbsp;<b>26-30 µg/m³</b>: ????<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#960032;\\\">&#9724;</span>&nbsp;<b>31-35 µg/m³</b>: ????<br>\n  &nbsp;<span style=\\\"font-size:20px;color:#7d2181;\\\">&#9724;</span>&nbsp;<b>&gt;35 µg/m³</b>: ????<br>\n  <span style=\"color:#fbcb09;\">Ref: <a href='https://wwwn.cdc.gov/TSP/PHS/PHS.aspx?phsid=218&toxid=39' target=\"_blank\">US Agency for Toxic Substances and Disease Registry</a></span>\n</div>\n",
+				"mode": "html"
+			},
+			"pluginVersion": "10.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "influxdb",
+						"uid": "aqdr-ts-db-flux"
+					},
+					"query": "from(bucket: \"AIR_QUALITY\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"CONTINUOUS_MONITORING_\")\r\n  |> filter(fn: (r) => r.AQ == \"IAQ\")\r\n  |> filter(fn: (r) => r._field == \"co2\")\r\n  |> group(columns: [\"scenario\"], mode:\"by\")\r\n  |> mean()",
+					"refId": "A"
+				}
+			],
+			"transparent": true,
+			"type": "text"
+		}
+	],
+	"refresh": "",
+	"schemaVersion": 39,
+	"tags": [
+		"at",
+		"de",
+		"es",
+		"nl",
+		"no",
+		"pl"
+	],
+	"templating": {
+		"list": []
+	},
+	"time": {
+		"from": "now-6h",
+		"to": "now"
+	},
+	"timepicker": {
+		"hidden": false,
+		"refresh_intervals": []
+	},
+	"timezone": "",
+	"title": "5. Indoor Air Quality per Scenario type",
+	"uid": "indoor-air-quality-per-scenario-type",
+	"version": 1,
+	"weekStart": ""
+}
